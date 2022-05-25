@@ -185,6 +185,9 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="account__content__bottom__orders__single__content__third-column__informations">
+                            <span class="status"><b>Status zamówienia: </b>{{ translateStatusToPolish() }}</span>
+                        </div>
                         <div class="account__content__bottom__orders__single__content__third-column__summary">
                             <span class="grey">Łącznie</span>
                             <span class="price">{{ currentOrder.total }} <p class="grey">zł</p></span>
@@ -333,6 +336,29 @@
                 }
                 this.year = moment(String(value)).format('Y')
                 return this.day + ' ' + this.monthName + ' ' + this.year;
+            },
+            translateStatusToPolish() {
+                switch (this.currentOrder.status) {
+                    case 'ordered':
+                        this.currentOrder.status = 'Zamówiono'
+                        break;
+                    case 'accepted':
+                        this.currentOrder.status = 'Zaakceptowano'
+                        break;
+                    case 'sent':
+                        this.currentOrder.status = 'Wysłano'
+                        break;
+                    case 'delivered':
+                        this.currentOrder.status = 'Dostarczono'
+                        break;
+                    case 'returned':
+                        this.currentOrder.status = 'Zwrócono'
+                        break;
+                    case 'cancelled':
+                        this.currentOrder.status = 'Anulowano'
+                        break;
+                }
+                return this.currentOrder.status
             },
             showDetails(order) {
                 this.currentOrder = order;

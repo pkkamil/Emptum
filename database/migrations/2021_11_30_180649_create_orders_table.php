@@ -19,6 +19,7 @@ class CreateOrdersTable extends Migration
             $table->integer('user_id')->nullable();
             $table->string('email', 100);
             $table->enum('status', ['ordered', 'accepted', 'sent', 'delivered', 'cancelled'])->default('ordered');
+            $table->decimal('total', 10, 2);
             $table->integer('cart_id');
             $table->enum('delivery_method', ['pickup_in_person', 'courier']);
             $table->enum('delivery_place', ['krakow', 'warszawa'])->nullable();
@@ -37,7 +38,6 @@ class CreateOrdersTable extends Migration
             $table->string('comment', 500);
             $table->decimal('delivery_price', 10, 2)->default('0.00');
             $table->timestamp('ordered_at')->useCurrent();
-            $table->decimal('total', 10, 2);
             $table->timestamps();
         });
     }

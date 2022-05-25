@@ -54,7 +54,7 @@
                     <input type="text" name="company_name" id="company_name" placeholder="Nazwa firmy" v-model="address.company_name">
                 </label>
                 <label for="nip_code" class="addresses__content__bottom__new__form__input px1">
-                    <input type="text" name="nip_code" id="nip_code" placeholder="NIP" required v-model="address.nip_code">
+                    <input type="text" name="nip_code" id="nip_code" placeholder="NIP" required v-model="address.nip_code" maxLength="10">
                 </label>
                 <div class="addresses__content__bottom__new__form__two px2">
                     <label for="name" class="addresses__content__bottom__new__form__two__input-small">

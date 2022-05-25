@@ -28,12 +28,15 @@
                         {{ $i -> status == 'accepted' ? 'Zaakceptowano' : '' }}
                         {{ $i -> status == 'sent' ? 'Wysłano' : '' }}
                         {{ $i -> status == 'delivered' ? 'Dostarczono' : '' }}
+                        {{ $i -> status == 'returned' ? 'Zwrócono' : '' }}
                         {{ $i -> status == 'cancelled' ? 'Anulowano' : '' }}
                     </div>
                     <div class="td total">{{ $i -> total }} <span class="grey">zł</span></div>
                     <div class="td date">{{ $i -> ordered_at }}</div>
                     <div class="td right">
-                        <i class="far fa-trash-alt delete" data-order-id="{{ $i -> id }}"></i>
+                        @if ($i -> status == 'cancelled')
+                            <i class="far fa-trash-alt delete" data-order-id="{{ $i -> id }}"></i>
+                        @endif
                         <a href="{{ url('/admin/zamowienia/'.$i -> id) }}"><i class="far fa-eye"></i></a>
                     </div>
                 @endforeach

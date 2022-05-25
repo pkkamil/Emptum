@@ -12,12 +12,8 @@ use App\CartPart;
 class HomeController extends Controller
 {
     public function index() {
-        $products = Product::paginate(8);
-        return view('home')->with('products', $products);
-    }
-
-    public function contact() {
-        return view('contact');
+        $bestsellers = Product::orderBy('purchased', 'desc')->paginate(8);
+        return view('home')->with('bestsellers', $bestsellers);
     }
 
     public function catalog() {
@@ -30,7 +26,7 @@ class HomeController extends Controller
             $cart = Auth::user() -> cart;
             if ($cart) {
                 $products = $cart -> products;
-                if (!count($products) == 0)
+                if (count($products) != 0)
                     return view('cart')->with('cart', $products);
             }
         } else {
@@ -39,13 +35,13 @@ class HomeController extends Controller
                 $cart = Cart::where('token', $token)->first();
                 if ($cart) {
                     $products = $cart -> products;
-                    if (!count($products) == 0)
+                    if (count($products) != 0)
                         return view('cart')->with('cart', $products);
                 }
             }
         }
-        $products = Product::paginate(4);
-        return view('cart')->with('products', $products);
+        $bestsellers = Product::orderBy('purchased', 'desc')->paginate(4);
+        return view('cart')->with('bestsellers', $bestsellers);
     }
 
     public function beforeOrder() {

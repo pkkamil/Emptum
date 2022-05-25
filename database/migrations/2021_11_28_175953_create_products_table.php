@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->string('description', 500);
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
+            $table->integer('purchased')->default('0');
             $table->string('link', 100);
             $table->boolean('availability')->default('1');
             $table->timestamps();

@@ -8,7 +8,7 @@ use App\Cart;
 use App\CartPart;
 use App\Order;
 use App\User;
-use Illuminate\Support\Str;
+use App\Product;
 
 class OrderController extends Controller
 {
@@ -26,6 +26,7 @@ class OrderController extends Controller
                 return ['status' => 404];
             $cart_id = $cart -> id;
         }
+
         return CartPart::join('products', 'carts_products.product_id', '=', 'products.id')->where('cart_id', $cart_id)->get(['carts_products.id', 'carts_products.price', 'carts_products.items', 'products.image', 'products.link', 'products.name']);
     }
 
@@ -115,6 +116,56 @@ class OrderController extends Controller
             $cart -> user_id = $req -> user_id;
         } else {
             Cookie::queue(Cookie::forget('basket_token'));
+        }
+
+        foreach (Cart::find($cart_id) -> products as $product) {
+            $product_id = $product -> product_id;
+            $items = $product -> items;
+
+            $bought_product = Product::find($product_id);
+
+            // change purchased
+            $bought_product -> purchased += $items;
+
+            // change availability
+            $bought_product -> quantity -= $items;
+
+            if ($bought_product -> quantity == 0)
+                $bought_product -> availability = 0;
+
+            $bought_product -> save();
+        }
+
+        // Check other carts
+        $carts = Cart::where('ordered', 0)->get();
+        foreach ($carts as $cart) {
+            foreach($cart -> products as $product) {
+                $product_id = $product -> product_id;
+                $cartPart_id = $product -> id;
+                $items = $product -> items;
+
+                $bought_product = Product::find($product_id);
+
+                if ($bought_product -> availability == 0) {
+                    CartPart::destroy($cartPart_id);
+                    $cart -> total -= $product -> price;
+                    $cart -> save();
+                    if (count(Cart::find($cart -> id) -> products) == 0) {
+                        Cart::destroy($cart -> id);
+                    }
+                } else {
+                    if ($bought_product -> quantity < $items) {
+                        $cartPart = CartPart::find($cartPart_id);
+                        $cart -> total -= $cartPart -> price;
+                        $cartPart -> items = $bought_product -> quantity;
+                        $cartPart -> price = $bought_product -> price * $bought_product -> quantity;
+                        $cart -> save();
+                        $cartPart -> save();
+                        $cart -> total += $cartPart -> price;
+                        $cart -> save();
+                    }
+                }
+            }
         }
 
         if (!$req -> user_id)

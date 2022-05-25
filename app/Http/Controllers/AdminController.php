@@ -54,6 +54,9 @@ class AdminController extends Controller
     public function deleteOrder(Request $req) {
         if (Auth::user() -> role != 'admin')
             return redirect('/');
+        $cart = Cart::find(Order::find($req -> order_id) -> cart_id);
+        $cart -> ordered = 0;
+        $cart -> save();
         Order::destroy($req -> order_id);
         if (count(Order::all()) != 0)
             return redirect('/admin/zamowienia');
@@ -161,6 +164,10 @@ class AdminController extends Controller
         }
         $product -> link = $req -> link;
         $product -> quantity = $req -> quantity;
+        if ($req -> quantity > 0)
+            $product -> availability = 1;
+        else
+            $product -> availability = 0;
         $product -> price = $req -> price;
         $product -> save();
         return ['status' => 200];
@@ -180,6 +187,51 @@ class AdminController extends Controller
             if (!$order)
                 abort(404);
             $order -> status = $req -> status;
+
+            if ($order -> included) {
+                if ($order -> status == 'returned' || $order -> status == 'cancelled') {
+                    foreach (Cart::find($order -> cart_id) -> products as $product) {
+                        $product_id = $product -> product_id;
+                        $items = $product -> items;
+
+                        $bought_product = Product::find($product_id);
+
+                        // change purchased
+                        $bought_product -> purchased -= $items;
+
+                        // change availability
+                        $bought_product -> quantity += $items;
+
+                        if ($bought_product -> quantity > 0)
+                            $bought_product -> availability = 1;
+
+                        $bought_product -> save();
+                    }
+                    $order -> included = 0;
+                }
+            } else {
+                if ($order -> status == 'ordered' || $order -> status == 'accepted' || $order -> status == 'sent' || $order -> status == 'delivered') {
+                    foreach (Cart::find($order -> cart_id) -> products as $product) {
+                        $product_id = $product -> product_id;
+                        $items = $product -> items;
+
+                        $bought_product = Product::find($product_id);
+
+                        // change purchased
+                        $bought_product -> purchased += $items;
+
+                        // change availability
+                        $bought_product -> quantity -= $items;
+
+                        if ($bought_product -> quantity == 0)
+                            $bought_product -> availability = 0;
+
+                        $bought_product -> save();
+                    }
+                    $order -> included = 1;
+                }
+            }
+
             $order -> save();
             return ['status' => 200];
     }

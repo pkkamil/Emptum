@@ -37,7 +37,7 @@ Route::post('/create-new-order', 'OrderController@create')->middleware('throttle
 Route::post('/get-orders', 'OrderController@list')->middleware('throttle:60,1');
 
 Route::post('/get-last-productid', 'AdminController@getLastProductID')->middleware('throttle:60,1');
-Route::post('/addNewProduct', 'AdminController@addNewProduct')->middleware('throttle:60,1');
+Route::post('/add-new-product', 'AdminController@addNewProduct')->middleware('throttle:60,1');
 
 Route::post('/load-product', 'AdminController@loadProduct')->middleware('throttle:60,1');
 Route::post('/edit-product', 'AdminController@editProduct')->middleware('throttle:60,1');

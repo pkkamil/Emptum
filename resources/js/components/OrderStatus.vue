@@ -1,10 +1,11 @@
 <template>
     <span class="status"><b>Status zamówienia:</b>
-        <select name="status" id="status" v-model="status" @change=change>
+        <select name="status" id="status" v-model="status" @change='change'>
             <option value="ordered">Zamówiono</option>
             <option value="accepted">Zaakceptowano</option>
             <option value="sent">Wysłano</option>
             <option value="delivered">Dostarczono</option>
+            <option value="returned">Zwrócono</option>
             <option value="cancelled">Anulowano</option>
         </select>
         <section class="widget" v-show="widget">

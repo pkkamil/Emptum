@@ -2305,6 +2305,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['cart_id', '_token'],
@@ -2322,7 +2323,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       total: 0.00,
       count: 0,
-      loading: true,
+      loading: false,
       widget: false
     };
   },
@@ -2386,6 +2387,8 @@ __webpack_require__.r(__webpack_exports__);
         return res.json();
       }).then(function (res) {
         _this3.showCart();
+
+        _this3.loading = false;
       })["catch"](function (err) {
         _this3.widget = true;
       });
@@ -2393,12 +2396,14 @@ __webpack_require__.r(__webpack_exports__);
     increment: function increment(product) {
       if (product.items < product.quantity) {
         product.items++;
+        this.loading = true;
         this.updateCart(product);
       }
     },
     decrement: function decrement(product) {
       if (product.items > 1) {
         product.items--;
+        this.loading = true;
         this.updateCart(product);
       }
     },
@@ -2407,6 +2412,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     change: function change(product) {
       if (product.items < 1) product.items = 1;
+      this.loading = true;
       this.updateCart(product);
     },
     remove: function remove(product) {
@@ -3462,6 +3468,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_id', '_token'],
@@ -3602,6 +3611,35 @@ __webpack_require__.r(__webpack_exports__);
       this.year = moment__WEBPACK_IMPORTED_MODULE_0___default()(String(value)).format('Y');
       return this.day + ' ' + this.monthName + ' ' + this.year;
     },
+    translateStatusToPolish: function translateStatusToPolish() {
+      switch (this.currentOrder.status) {
+        case 'ordered':
+          this.currentOrder.status = 'Zamówiono';
+          break;
+
+        case 'accepted':
+          this.currentOrder.status = 'Zaakceptowano';
+          break;
+
+        case 'sent':
+          this.currentOrder.status = 'Wysłano';
+          break;
+
+        case 'delivered':
+          this.currentOrder.status = 'Dostarczono';
+          break;
+
+        case 'returned':
+          this.currentOrder.status = 'Zwrócono';
+          break;
+
+        case 'cancelled':
+          this.currentOrder.status = 'Anulowano';
+          break;
+      }
+
+      return this.currentOrder.status;
+    },
     showDetails: function showDetails(order) {
       this.currentOrder = order;
       this.ifSeeDetails = true;
@@ -3648,6 +3686,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
 //
 //
 //
@@ -62704,6 +62743,7 @@ var render = function () {
                       id: "nip_code",
                       placeholder: "NIP",
                       required: "",
+                      maxLength: "10",
                     },
                     domProps: { value: _vm.address.nip_code },
                     on: {
@@ -63288,9 +63328,19 @@ var render = function () {
         _vm._v("W cenie zawarto podatek VAT"),
       ]),
       _vm._v(" "),
-      _c("a", { staticClass: "button dark", attrs: { href: "/zamowienie" } }, [
-        _vm._v("Przejdź do zamówienia"),
-      ]),
+      _vm.loading
+        ? _c("span", { staticClass: "button dark" }, [
+            _vm._v("Przejdź do zamówienia"),
+          ])
+        : _vm._e(),
+      _vm._v(" "),
+      !_vm.loading
+        ? _c(
+            "a",
+            { staticClass: "button dark", attrs: { href: "/zamowienie" } },
+            [_vm._v("Przejdź do zamówienia")]
+          )
+        : _vm._e(),
     ]),
     _vm._v(" "),
     _c(
@@ -63331,8 +63381,10 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("span", { staticClass: "status" }, [
-      _vm._v("Zbyt wiele zapytań!"),
-      _c("p", { staticClass: "to-hide" }, [_vm._v(" Zwolnij!")]),
+      _vm._v("Wystąpił błąd!"),
+      _c("p", { staticClass: "to-hide" }, [
+        _vm._v(" Spróbuj ponownie później!"),
+      ]),
     ])
   },
 ]
@@ -65484,7 +65536,6 @@ var render = function () {
                   name: "comment",
                   id: "comment",
                   placeholder: "Uwagi",
-                  required: "",
                   maxlength: "500",
                 },
                 domProps: { value: _vm.comment },
@@ -66683,6 +66734,20 @@ var render = function () {
                           "div",
                           {
                             staticClass:
+                              "account__content__bottom__orders__single__content__third-column__informations",
+                          },
+                          [
+                            _c("span", { staticClass: "status" }, [
+                              _c("b", [_vm._v("Status zamówienia: ")]),
+                              _vm._v(_vm._s(_vm.translateStatusToPolish())),
+                            ]),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
                               "account__content__bottom__orders__single__content__third-column__summary",
                           },
                           [
@@ -66931,6 +66996,8 @@ var render = function () {
         _c("option", { attrs: { value: "delivered" } }, [
           _vm._v("Dostarczono"),
         ]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "returned" } }, [_vm._v("Zwrócono")]),
         _vm._v(" "),
         _c("option", { attrs: { value: "cancelled" } }, [_vm._v("Anulowano")]),
       ]

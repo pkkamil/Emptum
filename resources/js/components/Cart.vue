@@ -30,12 +30,13 @@
             <span class="grey">Łącznie</span>
             <span class="price">{{ total ? total : '0.00' }} <p class="grey">zł</p></span>
             <span class="small">W cenie zawarto podatek VAT</span>
-            <a href="/zamowienie" class="button dark">Przejdź do zamówienia</a>
+            <span v-if="loading" class="button dark">Przejdź do zamówienia</span>
+            <a v-if="!loading" href="/zamowienie" class="button dark">Przejdź do zamówienia</a>
         </section>
         <section class="widget" v-show="widget">
             <div class="widget__upper">
                 <i class="fas fa-exclamation-triangle"></i>
-                <span class="status">Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p></span>
+                <span class="status">Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p></span>
                 <i class="fas fa-times close" @click="widget = false"></i>
             </div>
         </section>
@@ -63,7 +64,7 @@
                 },
                 total: 0.00,
                 count: 0,
-                loading: true,
+                loading: false,
                 widget: false,
             };
         },
@@ -121,6 +122,7 @@
                     .then(res => res.json())
                     .then(res => {
                         this.showCart()
+                        this.loading = false;
                     })
                     .catch(err => {
                         this.widget = true;
@@ -129,12 +131,14 @@
             increment(product) {
                 if (product.items < product.quantity) {
                     product.items++;
+                    this.loading = true;
                     this.updateCart(product)
                 }
             },
             decrement(product) {
                 if (product.items > 1) {
                     product.items--;
+                    this.loading = true;
                     this.updateCart(product)
                 }
             },
@@ -145,6 +149,7 @@
             change(product) {
                 if (product.items < 1)
                     product.items = 1
+                    this.loading = true;
                 this.updateCart(product)
             },
             remove(product) {

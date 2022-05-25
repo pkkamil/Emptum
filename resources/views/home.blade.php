@@ -6,7 +6,7 @@
 @section('content')
 <main class="home">
     <article class="home__welcome">
-        @if (count($products) != 0)
+        @if (count($bestsellers) != 0)
             <section class="home__welcome__box">
                 <h2>Przeglądaj niesamowite produkty</h2>
                 <span class="button dark">Przeglądaj</span>

@@ -225,6 +225,8 @@ select:-webkit-autofill:focus
                     width: 100%
                     height: 100%
                     transition: transform .5s ease
+                    &.lack
+                        filter: grayscale(1)
             & span:first-of-type
                 text-decoration: none
                 color: #555
@@ -385,6 +387,12 @@ select:-webkit-autofill:focus
                 letter-spacing: .1px
                 color: $primary
                 margin-bottom: 30px
+            & h4
+                font-size: 1.3rem
+                font-weight: 400
+                text-transform: uppercase
+                color: $primary
+                margin-top: 30px
             & .price
                 font-size: 1.3rem
                 color: #555
@@ -636,7 +644,7 @@ select:-webkit-autofill:focus
         &__summary
             margin-top: 30px
             text-align: right
-            & span
+            & span:not(.button)
                 display: block
                 &.grey
                     font-weight: lighter
@@ -653,6 +661,9 @@ select:-webkit-autofill:focus
                     font-weight: lighter
                     margin-top: 5px
                     margin-bottom: 20px
+            & span.button
+                cursor: default
+                background-color: #555
             // & a
             //     margin-top: 20px
             //     font-size: 1rem
@@ -1426,7 +1437,7 @@ select:-webkit-autofill:focus
                             margin-bottom: 5px
                             & b
                                 font-weight: 400
-                                color: #333
+                                color: $primary
                         &.more
                             background-color: $primary
                             @include flex-center

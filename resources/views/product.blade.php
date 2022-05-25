@@ -1,5 +1,6 @@
 <?php
     $title = $product -> name;
+    $lazy = True;
 ?>
 @extends('layouts.app')
 
@@ -11,14 +12,21 @@
             <h3>{{ $product -> name }}</h3>
             <span class="price">{{ $product -> price }} <span class="grey">zł</span></span>
             <span class="small">Cena za 1 sztukę</span>
-            <form autocomplete="off">
-                <span>Ilość:</span>
-                <div id="app">
-                    <manage-quantity product_id="{{ $product -> id }}"></manage-quantity>
-                </div>
-                <button class="bright" type="submit">Dodaj do koszyka</button>
-                <span class="button dark buy_now">Kup teraz</span>
-            </form>
+            @if ($product -> availability == 0)
+                <form autocomplete="off">
+                    <span>Ilość: 0</span>
+                    <h4>Produkt niedostępny</h4>
+                </form>
+            @else
+                <form autocomplete="off">
+                    <span>Ilość:</span>
+                    <div id="app">
+                        <manage-quantity product_id="{{ $product -> id }}"></manage-quantity>
+                    </div>
+                    <button class="bright" type="submit">Dodaj do koszyka</button>
+                    <span class="button dark buy_now">Kup teraz</span>
+                </form>
+            @endif
             <section class="product__content__informations__details">
                 @foreach (explode(',', $product -> description) as $i)
                     <span>{{ $i }}</span>

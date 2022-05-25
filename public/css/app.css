@@ -288,6 +288,10 @@ select:-webkit-autofill:focus {
   transition: transform 0.5s ease;
 }
 
+.products__list__single__image img.lack {
+  filter: grayscale(1);
+}
+
 .products__list__single span:first-of-type {
   text-decoration: none;
   color: #555;
@@ -516,6 +520,14 @@ select:-webkit-autofill:focus {
   letter-spacing: 0.1px;
   color: #333;
   margin-bottom: 30px;
+}
+
+.product__content__informations h4 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: #333;
+  margin-top: 30px;
 }
 
 .product__content__informations .price {
@@ -882,31 +894,36 @@ select:-webkit-autofill:focus {
   text-align: right;
 }
 
-.cart__content__summary span {
+.cart__content__summary span:not(.button) {
   display: block;
 }
 
-.cart__content__summary span.grey {
+.cart__content__summary span:not(.button).grey {
   font-weight: lighter;
   text-transform: uppercase;
   margin-bottom: 5px;
 }
 
-.cart__content__summary span.price {
+.cart__content__summary span:not(.button).price {
   font-size: 1.1rem;
 }
 
-.cart__content__summary span.price p {
+.cart__content__summary span:not(.button).price p {
   display: inline;
   font-weight: lighter;
 }
 
-.cart__content__summary span.small {
+.cart__content__summary span:not(.button).small {
   font-size: 0.8rem;
   color: #999;
   font-weight: lighter;
   margin-top: 5px;
   margin-bottom: 20px;
+}
+
+.cart__content__summary span.button {
+  cursor: default;
+  background-color: #555;
 }
 
 .before-order {
@@ -3055,6 +3072,10 @@ footer a {
     margin-bottom: 20px;
   }
 
+  .product__content__informations h4 {
+    font-size: 1.2rem;
+  }
+
   .product__content__informations form span:not(.dark) {
     margin-top: 20px;
   }
@@ -3421,6 +3442,10 @@ footer a {
     font-size: 1.5rem;
   }
 
+  .product__content__informations h4 {
+    font-size: 1.1rem;
+  }
+
   .product__content__informations .price {
     font-size: 1.2rem;
   }
@@ -3777,14 +3802,6 @@ footer a {
   .product__content__informations {
     margin-top: 30px;
     width: 520px;
-  }
-
-  .product__content__informations h3 {
-    font-size: 1.5rem;
-  }
-
-  .product__content__informations .price {
-    font-size: 1.2rem;
   }
 
   .results {
@@ -4955,6 +4972,10 @@ footer a {
 
   .product__content__informations h3 {
     font-size: 1.2rem;
+  }
+
+  .product__content__informations h4 {
+    font-size: 1rem;
   }
 
   .product__content__informations .price {

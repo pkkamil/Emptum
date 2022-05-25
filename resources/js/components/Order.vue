@@ -138,7 +138,7 @@
             <section class="order__content__third-column">
                 <h4>Dodatkowe uwagi</h4>
                 <label for="content" class="order__content__third-column textarea">
-                    <textarea name="comment" id="comment" placeholder="Uwagi" v-model="comment" required maxlength="500"></textarea>
+                    <textarea name="comment" id="comment" placeholder="Uwagi" v-model="comment" maxlength="500"></textarea>
                 </label>
                 <h4>Podsumowanie</h4>
                 <div class="order__content__third-column">
