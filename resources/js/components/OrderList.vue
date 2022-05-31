@@ -37,18 +37,12 @@
                         </div>
                         <h4 v-if="currentOrder.delivery_method == 'pickup_in_person'">Miejsce odbioru</h4>
                         <div class="account__content__bottom__orders__single__content__first-column place" v-if="currentOrder.delivery_method == 'pickup_in_person'">
-                            <label for="place1" class="account__content__bottom__orders__single__content__first-column place input" v-if="currentOrder.delivery_place == 'krakow'">
-                                <div>
-                                    <span>Sklep firmowy Kosmo</span>
-                                    <span>Kraków</span>
-                                    <span>Kosmiczna 15</span>
-                                </div>
-                            </label>
-                            <label for="place2" class="account__content__bottom__orders__single__content__first-column place input" v-if="currentOrder.delivery_place == 'warszawa'">
-                                <div>
-                                    <span>Żabka</span>
-                                    <span>Warszawa</span>
-                                    <span>Avengersów 121</span>
+                            <label for="place" class="account__content__bottom__orders__single__content__first-column place input">
+                                <div class="ccount__content__bottom__orders__single__content__first-column place__details">
+                                    <span>{{ deliveryPlace.name }}</span>
+                                    <span>{{ deliveryPlace.city }}</span>
+                                    <span v-if="deliveryPlace.apartment_number">{{ deliveryPlace.street + ' ' + deliveryPlace.house_number + '/' + deliveryPlace.apartment_number }}</span>
+                                    <span v-if="!deliveryPlace.apartment_number">{{ deliveryPlace.street + ' ' + deliveryPlace.house_number }}</span>
                                 </div>
                             </label>
                         </div>
@@ -172,7 +166,7 @@
                                     <span>{{ product.price }} <span class="grey">zł</span></span>
                                 </div>
                             </div>
-                            <div class="account__content__bottom__orders__single__content__third-column__table__single delivery_price" v-if="currentOrder.delivery_method=='courier'">
+                            <div class="account__content__bottom__orders__single__content__third-column__table__single delivery-price" v-if="currentOrder.delivery_method=='courier'">
                                 <div class="td">
                                     <i class="fas fa-truck"></i>
                                 </div>
@@ -181,12 +175,13 @@
                                 </div>
                                 <div></div>
                                 <div class="td price">
-                                    <span>20.00 <span class="grey">zł</span></span>
+                                    <span>{{ currentOrder.delivery_price }} <span class="grey">zł</span></span>
                                 </div>
                             </div>
                         </div>
                         <div class="account__content__bottom__orders__single__content__third-column__informations">
                             <span class="status"><b>Status zamówienia: </b>{{ translateStatusToPolish() }}</span>
+                            <span class="button dark button-small" v-if="currentOrder.status != 'cancelled' && currentOrder.status != 'returned'" @click="ifWantCancel = true">Anuluj zamówienie</span>
                         </div>
                         <div class="account__content__bottom__orders__single__content__third-column__summary">
                             <span class="grey">Łącznie</span>
@@ -200,9 +195,16 @@
         <section class="widget" v-if="widget">
             <div class="widget__upper">
                 <i class="fas fa-exclamation-triangle"></i>
-                <span class="status">Wystąpił błąd! Spróbuj ponownie później!</span>
+                <span class="status" v-html="result.message"></span>
                 <i class="fas fa-times close" @click="widget = false"></i>
             </div>
+        </section>
+        <section class="confirmation vue" v-if="ifWantCancel">
+            <section class="confirmation__box">
+                <h4>Czy na pewno chcesz anulować to zamówienie?</h4>
+                    <button type="submit" class="button-small dark danger" @click="cancelOrder(currentOrder.id)">Tak</button>
+                    <span class="button button-small dark cancel" @click="ifWantCancel = false">Nie</span>
+            </section>
         </section>
     </div>
 </template>
@@ -222,7 +224,7 @@
                     email: '',
                     status: '',
                     delivery_method: '',
-                    delivery_place: '',
+                    deliveryPlace_id: '',
                     payment_method: '',
                     purchaser_type: '',
                     name: '',
@@ -241,12 +243,23 @@
                     order_at: '',
                 },
                 currentOrder: {},
+                deliveryPlace: {
+                    id: '',
+                    name: 'Nazwa obiektu',
+                    street: 'Ulica',
+                    city: 'Miasto',
+                    house_number: '1',
+                    apartment_number: '1'
+                },
                 widget: false,
                 ifSeeDetails: false,
                 day: '',
                 monthName: '',
                 year: '',
                 moreExists: false,
+                result: {
+                    message: 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>',
+                },
                 limit: true,
                 expanded: false,
                 products: [],
@@ -256,7 +269,8 @@
                     link: '',
                     image: '',
                     name: ''
-                }
+                },
+                ifWantCancel: false,
             };
         },
         mounted() {
@@ -269,27 +283,28 @@
                 .then(res => {
                     if (!res.ok) {
                         if (res.status == 401)
-                            document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
-                        else if (res.status == 429)
-                            document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
-                        else
-                            document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                        this.widget = true;
+                            if (res.status == 401)
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>'
+                            else if (res.status == 429)
+                                this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
+                            else
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                        this.widget = true
                     }
-                    return res;
+                    return res
                 })
                 .then(res => res.json())
                 .then(res => {
                     if (!res.exception) {
-                        this.orders = res;
+                        this.orders = res
                         if (this.orders.length > 8)
                             this.moreExists = true
                     }
                 })
                 .catch(err => {
-                    this.widget = true;
+                    this.widget = true
                 });
-            },
+        },
         methods: {
             format_date(value) {
                 return moment(String(value)).format('D.M.Y')
@@ -299,98 +314,159 @@
                 switch (parseInt(moment(String(value)).format('M'))) {
                     case 1:
                         this.monthName = 'stycznia'
-                        break;
+                        break
                     case 2:
                         this.monthName = 'lutego'
-                        break;
+                        break
                     case 3:
                         this.monthName = 'marca'
-                        break;
+                        break
                     case 4:
                         this.monthName = 'kwietnia'
-                        break;
+                        break
                     case 5:
                         this.monthName = 'maja'
-                        break;
+                        break
                     case 6:
                         this.monthName = 'czerwca'
-                        break;
+                        break
                     case 7:
                         this.monthName = 'lipca'
-                        break;
+                        break
                     case 8:
                         this.monthName = 'sierpnia'
-                        break;
+                        break
                     case 9:
                         this.monthName = 'września'
-                        break;
+                        break
                     case 10:
                         this.monthName = 'października'
-                        break;
+                        break
                     case 11:
                         this.monthName = 'listopada'
-                        break;
+                        break
                     case 12:
                         this.monthName = 'grudnia'
-                        break;
+                        break
                 }
                 this.year = moment(String(value)).format('Y')
-                return this.day + ' ' + this.monthName + ' ' + this.year;
+                return this.day + ' ' + this.monthName + ' ' + this.year
             },
             translateStatusToPolish() {
                 switch (this.currentOrder.status) {
                     case 'ordered':
-                        this.currentOrder.status = 'Zamówiono'
-                        break;
+                        this.currentOrder.polishStatus = 'Zamówiono'
+                        break
                     case 'accepted':
-                        this.currentOrder.status = 'Zaakceptowano'
-                        break;
+                        this.currentOrder.polishStatus = 'Zaakceptowano'
+                        break
                     case 'sent':
-                        this.currentOrder.status = 'Wysłano'
-                        break;
+                        this.currentOrder.polishStatus = 'Wysłano'
+                        break
                     case 'delivered':
-                        this.currentOrder.status = 'Dostarczono'
-                        break;
+                        this.currentOrder.polishStatus = 'Dostarczono'
+                        break
                     case 'returned':
-                        this.currentOrder.status = 'Zwrócono'
-                        break;
+                        this.currentOrder.polishStatus = 'Zwrócono'
+                        break
                     case 'cancelled':
-                        this.currentOrder.status = 'Anulowano'
-                        break;
+                        this.currentOrder.polishStatus = 'Anulowano'
+                        break
                 }
-                return this.currentOrder.status
+                return this.currentOrder.polishStatus
             },
             showDetails(order) {
-                this.currentOrder = order;
-                this.ifSeeDetails = true;
-                this.loadOrderedProducts();
+                this.currentOrder = order
+                this.ifSeeDetails = true
+                if (this.currentOrder.deliveryPlace_id)
+                    this.loadDeliveryPlaceDetails()
+                this.loadOrderedProducts()
             },
             loadMore() {
-                this.limit = false;
-                this.moreExists = false;
-                this.expanded = true;
+                this.limit = false
+                this.moreExists = false
+                this.expanded = true
             },
             collapse() {
-                this.limit = true;
-                this.moreExists = true;
-                this.expanded = false;
+                this.limit = true
+                this.moreExists = true
+                this.expanded = false
             },
             loadOrderedProducts() {
                 fetch('/api/get-products-from-cart/' + this.currentOrder.cart_id)
                     .then(res => {
                         if (res.status != 200)
-                            this.widget = true;
-                        return res;
+                            this.widget = true
+                        return res
                     })
                     .then(res => res.json())
                     .then(res => {
-                        this.products = res;
+                        this.products = res
                         document.querySelector('.summary').classList.add('loaded')
                     })
             },
             closeDetails() {
                 this.ifSeeDetails = false
                 this.products = []
+            },
+            loadDeliveryPlaceDetails() {
+                const requestOptions = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ _token: this._token, place_id: this.currentOrder.deliveryPlace_id })
+                };
+                fetch("/api/show-delivery-place", requestOptions)
+                    .then(res => {
+                        if (!res.ok) {
+                            if (res.status == 401)
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>'
+                            else if (res.status == 429)
+                                this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
+                            else
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                            this.widget = true
+                        }
+                        return res
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.exception) {
+                            this.deliveryPlace = res
+                        }
+                    })
+                    .catch(err => {
+                        this.widget = true
+                    });
+            },
+            cancelOrder(id) {
+                const requestOptions = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ user_id: this.user_id, _token: this._token, order_id: id })
+                };
+                fetch("/api/cancel-order", requestOptions)
+                    .then(res => {
+                        if (!res.ok) {
+                            if (res.status == 401)
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>'
+                            else if (res.status == 429)
+                                this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
+                            else
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                            this.widget = true
+                        }
+                        return res
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.exception) {
+                            this.currentOrder.status = 'cancelled'
+                            this.ifWantCancel = false
+                        }
+                    })
+                    .catch(err => {
+                        this.widget = true
+                    });
             }
         },
     }

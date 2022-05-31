@@ -1,6 +1,6 @@
 <article class="products">
     @if (isset($catalog))
-        <h4>Produkty</h4>
+        <h4>Katalog produktów</h4>
         <section class="products__list">
             @if (count($products) != 0)
                 @foreach ($products as $product)

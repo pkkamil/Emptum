@@ -2021,6 +2021,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_id', '_token'],
   data: function data() {
@@ -2042,7 +2049,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       editing: false,
       editing_id: 0,
-      widget: false
+      widget: false,
+      ifWantDelete: false
     };
   },
   mounted: function mounted() {
@@ -2131,6 +2139,7 @@ __webpack_require__.r(__webpack_exports__);
             _this.updateList();
 
             _this.editing = false;
+            _this.editing_id = 0;
           }
         })["catch"](function (err) {
           _this.widget = true;
@@ -2241,6 +2250,10 @@ __webpack_require__.r(__webpack_exports__);
         return res.json();
       }).then(function (res) {
         if (!res.exception) _this4.updateList();
+        _this4.ifWantDelete = false;
+        _this4.editing = false;
+
+        _this4.clearForm();
       })["catch"](function (err) {
         _this4.widget = true;
       });
@@ -2442,6 +2455,297 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (err) {
         _this4.widget = true;
       });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user_id', '_token'],
+  data: function data() {
+    return {
+      places: [],
+      place: {
+        id: '',
+        name: '',
+        street: '',
+        house_number: '',
+        apartment_number: '',
+        zip_code: '',
+        city: ''
+      },
+      result: {
+        message: ''
+      },
+      editing: false,
+      editing_id: 0,
+      widget: false // ifWantDelete: false,
+
+    };
+  },
+  mounted: function mounted() {
+    this.updateList();
+  },
+  methods: {
+    submit: function submit() {
+      var _this = this;
+
+      if (this.editing == false) {
+        var requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: this.place.name,
+            street: this.place.street,
+            house_number: this.place.house_number,
+            apartment_number: this.place.apartment_number,
+            zip_code: this.place.zip_code,
+            city: this.place.city,
+            user_id: this.user_id,
+            _token: this._token
+          })
+        };
+        fetch("/api/add-new-delivery-place", requestOptions).then(function (res) {
+          if (!res.ok) {
+            if (res.status == 401) _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+            _this.widget = true;
+          }
+
+          return res;
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          if (!res.exception) {
+            _this.clearForm();
+
+            _this.updateList();
+          }
+        })["catch"](function (err) {
+          _this.widget = true;
+        });
+      } else {
+        var _requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name: this.place.name,
+            street: this.place.street,
+            house_number: this.place.house_number,
+            apartment_number: this.place.apartment_number,
+            zip_code: this.place.zip_code,
+            city: this.place.city,
+            user_id: this.user_id,
+            _token: this._token,
+            place_id: this.place.id
+          })
+        };
+        fetch("/api/edit-delivery-place", _requestOptions).then(function (res) {
+          if (!res.ok) {
+            if (res.status == 401) _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+            _this.widget = true;
+          }
+
+          return res;
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          if (!res.exception) {
+            _this.clearForm();
+
+            _this.updateList();
+
+            _this.editing = false;
+            _this.editing_id = 0;
+          }
+        })["catch"](function (err) {
+          _this.widget = true;
+        });
+      }
+    },
+    updateList: function updateList() {
+      var _this2 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          _token: this._token
+        })
+      };
+      fetch("/api/get-delivery-places", requestOptions).then(function (res) {
+        if (!res.ok) {
+          if (res.status == 401) _this2.result.message = 'Wystąpił błąd! Brak autoryzacji!';else if (res.status == 429) _this2.result.message = 'Zbyt wiele zapytań! Zwolnij!';else _this2.result.message = 'Wystąpił błąd! Spróbuj ponownie później!';
+          _this2.widget = true;
+        }
+
+        return res;
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (!res.exception) _this2.places = res;
+      })["catch"](function (err) {
+        _this2.widget = true;
+      });
+    },
+    clearForm: function clearForm() {
+      this.place.name = '';
+      this.place.street = '';
+      this.place.house_number = '';
+      this.place.apartment_number = '';
+      this.place.zip_code = '';
+      this.place.city = '';
+    },
+    editPlace: function editPlace(id) {
+      var _this3 = this;
+
+      if (this.editing_id == id) {
+        this.editing_id = 0;
+        this.clearForm();
+        this.editing = false;
+      } else {
+        var requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            _token: this._token,
+            place_id: id
+          })
+        };
+        fetch("/api/show-delivery-place", requestOptions).then(function (res) {
+          if (!res.ok) {
+            if (res.status == 401) _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this3.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+            _this3.widget = true;
+          }
+
+          return res;
+        }).then(function (res) {
+          return res.json();
+        }).then(function (res) {
+          if (!res.exception) {
+            _this3.place = res;
+            _this3.editing = true;
+            _this3.editing_id = _this3.place.id;
+          }
+        })["catch"](function (err) {
+          _this3.widget = true;
+        });
+      }
+    },
+    // deletePlace(id) {
+    //     const requestOptions = {
+    //         method: "POST",
+    //         headers: { "Content-Type": "application/json" },
+    //         body: JSON.stringify({ user_id: this.user_id, _token: this._token, place_id: id })
+    //     };
+    //     fetch("/api/delete-delivery-place", requestOptions)
+    //         .then(res => {
+    //             if (!res.ok) {
+    //                 if (res.status == 401)
+    //                    this.result.message = 'Wystąpił błąd! Brak autoryzacji!'
+    //                 else if (res.status == 429)
+    //                    this.result.message = 'Zbyt wiele zapytań! Zwolnij!'
+    //                 else
+    //                    this.result.message = 'Wystąpił błąd! Spróbuj ponownie później!'
+    //                 this.widget = true
+    //             }
+    //             return res
+    //         })
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             if (!res.exception)
+    //                 this.updateList()
+    //             this.ifWantDelete = false
+    //             this.editing = false
+    //             this.clearForm()
+    //         })
+    //         .catch(err => {
+    //             this.widget = true
+    //         });
+    // },
+    checkStatus: function checkStatus() {
+      if (!res.ok) {
+        if (res.status == 401) this.result.message = 'Wystąpił błąd! Brak autoryzacji!';else if (res.status == 429) this.result.message = 'Zbyt wiele zapytań! Zwolnij!';else this.result.message = 'Wystąpił błąd! Spróbuj ponownie później!';
+        this.widget = true;
+      }
+
+      return res;
     }
   }
 });
@@ -3068,12 +3372,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_id', '_token', 'email', 'name', 'surname'],
   data: function data() {
     return {
       delivery_method: 'pickup_in_person',
-      delivery_place: 'krakow',
+      deliveryPlace_id: '',
       payment_method: 'cash_on_delivery',
       purchaser: {
         id: '',
@@ -3115,12 +3444,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         zip_code: '',
         city: ''
       },
+      result: {
+        message: 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+      },
       comment: '',
       delivery_price: 0.00,
       total: 0.00,
       ifSeeAddresses: false,
       haveAddress: false,
-      widget: false
+      widget: false,
+      places: [],
+      place: {
+        id: '',
+        name: '',
+        street: '',
+        house_number: '',
+        apartment_number: '',
+        city: ''
+      },
+      currentDeliveryPlace: {},
+      ifSeeAllDeliveryPlaces: false,
+      ifDeliveryPlaceChosen: false
     };
   },
   mounted: function mounted() {
@@ -3140,11 +3484,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return res.json();
     }).then(function (res) {
       _this.products = res;
+    })["catch"](function (err) {
+      _this.widget = true;
     });
     fetch('/api/get-total', requestOptions).then(function (res) {
       return res.json();
     }).then(function (res) {
       _this.total = res.total;
+    })["catch"](function (err) {
+      _this.widget = true;
     });
 
     if (this.user_id) {
@@ -3152,8 +3500,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         return res.json();
       }).then(function (res) {
         _this.haveAddress = res.haveAddress;
+      })["catch"](function (err) {
+        _this.widget = true;
       });
     }
+
+    fetch('/api/get-delivery-price').then(function (res) {
+      return res.json();
+    }).then(function (res) {
+      _this.delivery_price = parseFloat(res).toFixed(2);
+    })["catch"](function (err) {
+      _this.widget = true;
+    });
+    this.updateDeliveryPlacesList();
   },
   methods: {
     submit: function submit() {
@@ -3179,7 +3538,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           city: this.purchaser.city,
           comment: this.comment,
           delivery_method: this.delivery_method,
-          delivery_place: this.delivery_place,
+          deliveryPlace_id: this.deliveryPlace_id,
           payment_method: this.payment_method,
           delivery_price: this.delivery_price,
           total: this.total,
@@ -3189,7 +3548,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       };
       fetch("/api/create-new-order", requestOptions).then(function (res) {
         if (!res.ok) {
-          if (res.status == 401) document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';else if (res.status == 429) document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';else document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
+          if (res.status == 401) _this2.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this2.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this2.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
           _this2.widget = true;
         }
 
@@ -3220,7 +3579,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         };
         fetch("/api/get-addresses", requestOptions).then(function (res) {
           if (!res.ok) {
-            if (res.status == 401) document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';else if (res.status == 429) document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';else document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
+            if (res.status == 401) _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p> ';else if (res.status == 429) _this3.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
             _this3.widget = true;
           }
 
@@ -3243,9 +3602,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       this.total = parseFloat(this.total);
 
       if (this.delivery_method == 'courier') {
-        this.total = parseFloat(this.total + 20.00).toFixed(2);
-        this.delivery_price = 20;
-      } else this.total = parseFloat(this.total - 20.00).toFixed(2);
+        this.total = parseFloat(this.total + parseFloat(this.delivery_price)).toFixed(2);
+      } else this.total = parseFloat(this.total - parseFloat(this.delivery_price)).toFixed(2);
+    },
+    updateDeliveryPlacesList: function updateDeliveryPlacesList() {
+      var _this4 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          _token: this._token
+        })
+      };
+      fetch("/api/get-delivery-places", requestOptions).then(function (res) {
+        if (!res.ok) {
+          if (res.status == 401) _this4.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p> ';else if (res.status == 429) _this4.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this4.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+          _this4.widget = true;
+        }
+
+        return res;
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (!res.exception) {
+          _this4.places = res;
+          if (_this4.places.length < 4) _this4.deliveryPlace_id = _this4.places[0]['id'];
+        }
+      })["catch"](function (err) {
+        _this4.widget = true;
+      });
+    },
+    chooseDeliveryPlace: function chooseDeliveryPlace(place) {
+      this.currentDeliveryPlace = place;
+      this.ifSeeAllDeliveryPlaces = false;
+      this.deliveryPlace_id = place.id;
+      this.ifDeliveryPlaceChosen = true;
     }
   }
 });
@@ -3471,6 +3865,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['user_id', '_token'],
@@ -3483,7 +3879,7 @@ __webpack_require__.r(__webpack_exports__);
         email: '',
         status: '',
         delivery_method: '',
-        delivery_place: '',
+        deliveryPlace_id: '',
         payment_method: '',
         purchaser_type: '',
         name: '',
@@ -3502,12 +3898,23 @@ __webpack_require__.r(__webpack_exports__);
         order_at: ''
       },
       currentOrder: {},
+      deliveryPlace: {
+        id: '',
+        name: 'Nazwa obiektu',
+        street: 'Ulica',
+        city: 'Miasto',
+        house_number: '1',
+        apartment_number: '1'
+      },
       widget: false,
       ifSeeDetails: false,
       day: '',
       monthName: '',
       year: '',
       moreExists: false,
+      result: {
+        message: 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+      },
       limit: true,
       expanded: false,
       products: [],
@@ -3517,7 +3924,8 @@ __webpack_require__.r(__webpack_exports__);
         link: '',
         image: '',
         name: ''
-      }
+      },
+      ifWantCancel: false
     };
   },
   mounted: function mounted() {
@@ -3535,7 +3943,7 @@ __webpack_require__.r(__webpack_exports__);
     };
     fetch("/api/get-orders", requestOptions).then(function (res) {
       if (!res.ok) {
-        if (res.status == 401) document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';else if (res.status == 429) document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';else document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
+        if (res.status == 401) if (res.status == 401) _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
         _this.widget = true;
       }
 
@@ -3614,35 +4022,36 @@ __webpack_require__.r(__webpack_exports__);
     translateStatusToPolish: function translateStatusToPolish() {
       switch (this.currentOrder.status) {
         case 'ordered':
-          this.currentOrder.status = 'Zamówiono';
+          this.currentOrder.polishStatus = 'Zamówiono';
           break;
 
         case 'accepted':
-          this.currentOrder.status = 'Zaakceptowano';
+          this.currentOrder.polishStatus = 'Zaakceptowano';
           break;
 
         case 'sent':
-          this.currentOrder.status = 'Wysłano';
+          this.currentOrder.polishStatus = 'Wysłano';
           break;
 
         case 'delivered':
-          this.currentOrder.status = 'Dostarczono';
+          this.currentOrder.polishStatus = 'Dostarczono';
           break;
 
         case 'returned':
-          this.currentOrder.status = 'Zwrócono';
+          this.currentOrder.polishStatus = 'Zwrócono';
           break;
 
         case 'cancelled':
-          this.currentOrder.status = 'Anulowano';
+          this.currentOrder.polishStatus = 'Anulowano';
           break;
       }
 
-      return this.currentOrder.status;
+      return this.currentOrder.polishStatus;
     },
     showDetails: function showDetails(order) {
       this.currentOrder = order;
       this.ifSeeDetails = true;
+      if (this.currentOrder.deliveryPlace_id) this.loadDeliveryPlaceDetails();
       this.loadOrderedProducts();
     },
     loadMore: function loadMore() {
@@ -3671,6 +4080,68 @@ __webpack_require__.r(__webpack_exports__);
     closeDetails: function closeDetails() {
       this.ifSeeDetails = false;
       this.products = [];
+    },
+    loadDeliveryPlaceDetails: function loadDeliveryPlaceDetails() {
+      var _this3 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          _token: this._token,
+          place_id: this.currentOrder.deliveryPlace_id
+        })
+      };
+      fetch("/api/show-delivery-place", requestOptions).then(function (res) {
+        if (!res.ok) {
+          if (res.status == 401) _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this3.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this3.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+          _this3.widget = true;
+        }
+
+        return res;
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (!res.exception) {
+          _this3.deliveryPlace = res;
+        }
+      })["catch"](function (err) {
+        _this3.widget = true;
+      });
+    },
+    cancelOrder: function cancelOrder(id) {
+      var _this4 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: this.user_id,
+          _token: this._token,
+          order_id: id
+        })
+      };
+      fetch("/api/cancel-order", requestOptions).then(function (res) {
+        if (!res.ok) {
+          if (res.status == 401) _this4.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>';else if (res.status == 429) _this4.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>';else _this4.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>';
+          _this4.widget = true;
+        }
+
+        return res;
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        if (!res.exception) {
+          _this4.currentOrder.status = 'cancelled';
+          _this4.ifWantCancel = false;
+        }
+      })["catch"](function (err) {
+        _this4.widget = true;
+      });
     }
   }
 });
@@ -3907,6 +4378,219 @@ __webpack_require__.r(__webpack_exports__);
           _this3.widget = true;
         });
       }
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue_advanced_cropper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-advanced-cropper */ "./node_modules/vue-advanced-cropper/dist/index.es.js");
+/* harmony import */ var vue_advanced_cropper_dist_style_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-advanced-cropper/dist/style.css */ "./node_modules/vue-advanced-cropper/dist/style.css");
+/* harmony import */ var vue_advanced_cropper_dist_style_css__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue_advanced_cropper_dist_style_css__WEBPACK_IMPORTED_MODULE_1__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['user_id', '_token'],
+  components: {
+    Cropper: vue_advanced_cropper__WEBPACK_IMPORTED_MODULE_0__["Cropper"]
+  },
+  data: function data() {
+    return {
+      settings: {
+        homepage_background: '/images/bg-homepage.jpg',
+        welcome_box_text: '',
+        welcome_box_button_text: ''
+      },
+      result: {
+        type: '',
+        message: ''
+      },
+      image: '',
+      ifCropper: false,
+      widget: false
+    };
+  },
+  mounted: function mounted() {
+    this.loadSettings();
+  },
+  methods: {
+    loadSettings: function loadSettings() {
+      var _this = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: this.user_id,
+          _token: this._token
+        })
+      };
+      fetch("/api/load-settings", requestOptions).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this.settings.welcome_box_text = res['welcome_box_text'];
+        _this.settings.welcome_box_button_text = res['welcome_box_button_text'];
+      })["catch"](function (err) {
+        _this.result.type = 'fail';
+        _this.result.message = 'Wystąpił problem!<p class="to-hide"> Spróbuj ponownie później!</p>';
+        _this.widget = true;
+      })["finally"](function () {
+        _this.setRighWidgetPosition();
+      });
+    },
+    showCropper: function showCropper() {
+      this.image = URL.createObjectURL(event.target.files[0]);
+      if (this.image) this.ifCropper = true;
+    },
+    crop: function crop() {
+      var _this$$refs$cropper$g = this.$refs.cropper.getResult(),
+          canvas = _this$$refs$cropper$g.canvas;
+
+      this.settings.homepage_background = canvas.toDataURL();
+      this.ifCropper = false;
+      this.changeHomepageBackground();
+    },
+    changeHomepageBackground: function changeHomepageBackground() {
+      var _this2 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: this.user_id,
+          _token: this._token,
+          image: this.settings.homepage_background
+        })
+      };
+      fetch("/api/change-homepage-background", requestOptions).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this2.result.type = 'success';
+        _this2.result.message = 'Zmieniono tło strony<p class="to-hide"> powitalnej</p>';
+        _this2.widget = true;
+      })["catch"](function (err) {
+        _this2.result.type = 'fail';
+        _this2.result.message = 'Wystąpił problem!<p class="to-hide"> Spróbuj ponownie później!</p>';
+        _this2.widget = true;
+      })["finally"](function () {
+        _this2.setRighWidgetPosition();
+      });
+    },
+    changeWelcomeBoxText: function changeWelcomeBoxText() {
+      var _this3 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: this.user_id,
+          _token: this._token,
+          value: this.settings.welcome_box_text
+        })
+      };
+      fetch("/api/change-welcome-box-text", requestOptions).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this3.result.type = 'success';
+        _this3.result.message = 'Zmieniono tekst okna<p class="to-hide"> powitalnego</p>';
+        _this3.widget = true;
+      })["catch"](function (err) {
+        _this3.result.type = 'fail';
+        _this3.result.message = 'Wystąpił problem!<p class="to-hide"> Spróbuj ponownie później!</p>';
+        _this3.widget = true;
+      })["finally"](function () {
+        _this3.setRighWidgetPosition();
+      });
+    },
+    changeWelcomeBoxButtonText: function changeWelcomeBoxButtonText() {
+      var _this4 = this;
+
+      var requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: this.user_id,
+          _token: this._token,
+          value: this.settings.welcome_box_button_text
+        })
+      };
+      fetch("/api/change-welcome-box-button-text", requestOptions).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+        _this4.result.type = 'success';
+        _this4.result.message = 'Zmieniono tekst przycisku<p class="to-hide"> okna powitalnego</p>';
+        _this4.widget = true;
+      })["catch"](function (err) {
+        _this4.result.type = 'fail';
+        _this4.result.message = 'Wystąpił problem!<p class="to-hide"> Spróbuj ponownie później!</p>';
+        _this4.widget = true;
+      })["finally"](function () {
+        _this4.setRighWidgetPosition();
+      });
+    },
+    setRighWidgetPosition: function setRighWidgetPosition() {
+      document.querySelector('.widget').style.right = (window.screen.width - document.querySelector('.navbar__content').offsetWidth + 100) / 2 + 'px';
     }
   }
 });
@@ -62344,8 +63028,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px1",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "telephone" },
                 },
                 [
@@ -62380,8 +63063,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px2",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "street" },
                 },
                 [
@@ -62416,10 +63098,7 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass:
-                    "addresses__content__bottom__new__form__three px3a",
-                },
+                { staticClass: "addresses__content__bottom__new__form__three" },
                 [
                   _c(
                     "label",
@@ -62547,8 +63226,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px4",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "city" },
                 },
                 [
@@ -62723,8 +63401,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px1",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "nip_code" },
                 },
                 [
@@ -62760,9 +63437,7 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass: "addresses__content__bottom__new__form__two px2",
-                },
+                { staticClass: "addresses__content__bottom__new__form__two" },
                 [
                   _c(
                     "label",
@@ -62847,8 +63522,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px3",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "telephone" },
                 },
                 [
@@ -62883,8 +63557,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px4",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "street" },
                 },
                 [
@@ -62919,10 +63592,7 @@ var render = function () {
               _vm._v(" "),
               _c(
                 "div",
-                {
-                  staticClass:
-                    "addresses__content__bottom__new__form__three px5",
-                },
+                { staticClass: "addresses__content__bottom__new__form__three" },
                 [
                   _c(
                     "label",
@@ -63050,8 +63720,7 @@ var render = function () {
               _c(
                 "label",
                 {
-                  staticClass:
-                    "addresses__content__bottom__new__form__input px6",
+                  staticClass: "addresses__content__bottom__new__form__input",
                   attrs: { for: "city" },
                 },
                 [
@@ -63149,7 +63818,7 @@ var render = function () {
                     staticClass: "button bright",
                     on: {
                       click: function ($event) {
-                        return _vm.deleteAddress(address.id)
+                        _vm.ifWantDelete = true
                       },
                     },
                   },
@@ -63195,6 +63864,43 @@ var render = function () {
         ]),
       ]
     ),
+    _vm._v(" "),
+    _vm.ifWantDelete
+      ? _c("section", { staticClass: "confirmation vue" }, [
+          _c("section", { staticClass: "confirmation__box" }, [
+            _c("h4", [
+              _vm._v("Czy na pewno chcesz usunąć to miejsce odbioru?"),
+            ]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "button-small dark danger",
+                attrs: { type: "submit" },
+                on: {
+                  click: function ($event) {
+                    return _vm.deleteAddress(_vm.address.id)
+                  },
+                },
+              },
+              [_vm._v("Tak")]
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "button button-small dark cancel",
+                on: {
+                  click: function ($event) {
+                    _vm.ifWantDelete = false
+                  },
+                },
+              },
+              [_vm._v("Nie")]
+            ),
+          ]),
+        ])
+      : _vm._e(),
   ])
 }
 var staticRenderFns = []
@@ -63385,6 +64091,376 @@ var staticRenderFns = [
       _c("p", { staticClass: "to-hide" }, [
         _vm._v(" Spróbuj ponownie później!"),
       ]),
+    ])
+  },
+]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b&":
+/*!*****************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b& ***!
+  \*****************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("section", { staticClass: "admin__content__delivery-places" }, [
+    _c("div", { staticClass: "admin__content__delivery-places__new" }, [
+      _c("h4", [_vm._v("Dodaj nowe miejsce odbioru")]),
+      _vm._v(" "),
+      _c(
+        "form",
+        {
+          staticClass: "admin__content__delivery-places__new__form",
+          attrs: { method: "POST", autocomplete: "off" },
+          on: {
+            submit: function ($event) {
+              $event.preventDefault()
+              return _vm.submit.apply(null, arguments)
+            },
+          },
+        },
+        [
+          _c(
+            "label",
+            {
+              staticClass: "admin__content__delivery-places__new__form__input",
+              attrs: { for: "name" },
+            },
+            [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.place.name,
+                    expression: "place.name",
+                  },
+                ],
+                attrs: {
+                  type: "text",
+                  name: "name",
+                  id: "name",
+                  placeholder: "Nazwa miejsca odbioru",
+                  required: "",
+                },
+                domProps: { value: _vm.place.name },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.place, "name", $event.target.value)
+                  },
+                },
+              }),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "admin__content__delivery-places__new__form__input",
+              attrs: { for: "street" },
+            },
+            [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.place.street,
+                    expression: "place.street",
+                  },
+                ],
+                attrs: {
+                  type: "text",
+                  name: "street",
+                  id: "street",
+                  placeholder: "Ulica",
+                  required: "",
+                },
+                domProps: { value: _vm.place.street },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.place, "street", $event.target.value)
+                  },
+                },
+              }),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "admin__content__delivery-places__new__form__three",
+            },
+            [
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "admin__content__delivery-places__new__form__three__input-small",
+                  attrs: { for: "house_number" },
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.place.house_number,
+                        expression: "place.house_number",
+                      },
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "house_number",
+                      id: "house_number",
+                      placeholder: "Nr domu",
+                      required: "",
+                    },
+                    domProps: { value: _vm.place.house_number },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.place, "house_number", $event.target.value)
+                      },
+                    },
+                  }),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "admin__content__delivery-places__new__form__three__input-small",
+                  attrs: { for: "apartment_number" },
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.place.apartment_number,
+                        expression: "place.apartment_number",
+                      },
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "apartment_number",
+                      id: "apartment_number",
+                      placeholder: "Nr lokalu",
+                    },
+                    domProps: { value: _vm.place.apartment_number },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.place,
+                          "apartment_number",
+                          $event.target.value
+                        )
+                      },
+                    },
+                  }),
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "label",
+                {
+                  staticClass:
+                    "admin__content__delivery-places__new__form__three__input-small",
+                  attrs: { for: "zip_code" },
+                },
+                [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.place.zip_code,
+                        expression: "place.zip_code",
+                      },
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "zip_code",
+                      id: "zip_code",
+                      placeholder: "Kod pocztowy",
+                      required: "",
+                    },
+                    domProps: { value: _vm.place.zip_code },
+                    on: {
+                      input: function ($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.place, "zip_code", $event.target.value)
+                      },
+                    },
+                  }),
+                ]
+              ),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass: "admin__content__delivery-places__new__form__input",
+              attrs: { for: "city" },
+            },
+            [
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.place.city,
+                    expression: "place.city",
+                  },
+                ],
+                attrs: {
+                  type: "text",
+                  name: "city",
+                  id: "city",
+                  placeholder: "Miejscowość",
+                  required: "",
+                },
+                domProps: { value: _vm.place.city },
+                on: {
+                  input: function ($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(_vm.place, "city", $event.target.value)
+                  },
+                },
+              }),
+            ]
+          ),
+          _vm._v(" "),
+          _vm._m(0),
+        ]
+      ),
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "admin__content__delivery-places__box" }, [
+      _vm.places.length != 0 ? _c("h4", [_vm._v("Miejsca odbioru")]) : _vm._e(),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "admin__content__delivery-places__box__list" },
+        _vm._l(_vm.places, function (place) {
+          return _c(
+            "div",
+            {
+              key: place.id,
+              staticClass: "admin__content__delivery-places__box__list__single",
+            },
+            [
+              _c("span", [_vm._v(_vm._s(place.name))]),
+              _vm._v(" "),
+              _c("span", [
+                _vm._v(
+                  _vm._s(place.street + " " + place.house_number) +
+                    _vm._s(
+                      place.apartment_number ? "/" + place.apartment_number : ""
+                    )
+                ),
+              ]),
+              _vm._v(" "),
+              _c("span", [_vm._v(_vm._s(place.zip_code + " " + place.city))]),
+              _vm._v(" "),
+              _c("div", [
+                _c(
+                  "span",
+                  {
+                    class: [
+                      _vm.editing_id === place.id ? "dark" : "bright",
+                      "button",
+                    ],
+                    on: {
+                      click: function ($event) {
+                        return _vm.editPlace(place.id)
+                      },
+                    },
+                  },
+                  [_vm._v("Edytuj")]
+                ),
+              ]),
+            ]
+          )
+        }),
+        0
+      ),
+    ]),
+    _vm._v(" "),
+    _c(
+      "section",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.widget,
+            expression: "widget",
+          },
+        ],
+        staticClass: "widget",
+      },
+      [
+        _c("div", { staticClass: "widget__upper" }, [
+          _c("i", { staticClass: "fas fa-exclamation-triangle" }),
+          _vm._v(" "),
+          _c("span", {
+            staticClass: "status",
+            domProps: { innerHTML: _vm._s(_vm.result.message) },
+          }),
+          _vm._v(" "),
+          _c("i", {
+            staticClass: "fas fa-times close",
+            on: {
+              click: function ($event) {
+                _vm.widget = false
+              },
+            },
+          }),
+        ]),
+      ]
+    ),
+  ])
+}
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("button", { staticClass: "dark" }, [
+      _vm._v("Zapisz miejsce"),
+      _c("span", { staticClass: "toHide" }, [_vm._v(" odbioru")]),
     ])
   },
 ]
@@ -64316,80 +65392,176 @@ var render = function () {
             ? _c("h4", [_vm._v("Miejsce odbioru")])
             : _vm._e(),
           _vm._v(" "),
-          _vm.delivery_method == "pickup_in_person"
+          _vm.delivery_method == "pickup_in_person" && _vm.places.length < 4
+            ? _c(
+                "div",
+                { staticClass: "order__content__first-column place" },
+                _vm._l(_vm.places, function (place) {
+                  return _c(
+                    "label",
+                    {
+                      key: place.id,
+                      staticClass: "order__content__first-column place input",
+                      attrs: { for: "place" + place.id },
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.deliveryPlace_id,
+                            expression: "deliveryPlace_id",
+                          },
+                        ],
+                        attrs: {
+                          type: "radio",
+                          name: "place",
+                          id: "place" + place.id,
+                          checked: "",
+                        },
+                        domProps: {
+                          value: place.id,
+                          checked: _vm._q(_vm.deliveryPlace_id, place.id),
+                        },
+                        on: {
+                          change: function ($event) {
+                            _vm.deliveryPlace_id = place.id
+                          },
+                        },
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "order__content__first-column place__details",
+                        },
+                        [
+                          _c("span", [_vm._v(_vm._s(place.name))]),
+                          _vm._v(" "),
+                          _c("span", [_vm._v(_vm._s(place.city))]),
+                          _vm._v(" "),
+                          place.apartment_number
+                            ? _c("span", [
+                                _vm._v(
+                                  _vm._s(
+                                    place.street +
+                                      " " +
+                                      place.house_number +
+                                      "/" +
+                                      place.apartment_number
+                                  )
+                                ),
+                              ])
+                            : _vm._e(),
+                          _vm._v(" "),
+                          !place.apartment_number
+                            ? _c("span", [
+                                _vm._v(
+                                  _vm._s(
+                                    place.street + " " + place.house_number
+                                  )
+                                ),
+                              ])
+                            : _vm._e(),
+                        ]
+                      ),
+                    ]
+                  )
+                }),
+                0
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.delivery_method == "pickup_in_person" && _vm.places.length >= 4
             ? _c("div", { staticClass: "order__content__first-column place" }, [
-                _c(
-                  "label",
-                  {
-                    staticClass: "order__content__first-column place input",
-                    attrs: { for: "place1" },
-                  },
-                  [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.delivery_place,
-                          expression: "delivery_place",
-                        },
-                      ],
-                      attrs: {
-                        type: "radio",
-                        name: "place",
-                        id: "place1",
-                        value: "krakow",
-                        checked: "",
-                      },
-                      domProps: {
-                        checked: _vm._q(_vm.delivery_place, "krakow"),
-                      },
-                      on: {
-                        change: function ($event) {
-                          _vm.delivery_place = "krakow"
+                !_vm.ifDeliveryPlaceChosen
+                  ? _c(
+                      "span",
+                      {
+                        staticClass: "button-small dark",
+                        on: {
+                          click: function ($event) {
+                            _vm.ifSeeAllDeliveryPlaces = true
+                          },
                         },
                       },
-                    }),
-                    _vm._v(" "),
-                    _vm._m(0),
-                  ]
-                ),
-                _vm._v(" "),
-                _c(
-                  "label",
-                  {
-                    staticClass: "order__content__first-column place input",
-                    attrs: { for: "place2" },
-                  },
-                  [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.delivery_place,
-                          expression: "delivery_place",
-                        },
-                      ],
-                      attrs: {
-                        type: "radio",
-                        name: "place",
-                        id: "place2",
-                        value: "warszawa",
+                      [_vm._v("Wybierz")]
+                    )
+                  : _c(
+                      "label",
+                      {
+                        staticClass: "order__content__first-column place input",
+                        attrs: { for: "place" },
                       },
-                      domProps: {
-                        checked: _vm._q(_vm.delivery_place, "warszawa"),
-                      },
-                      on: {
-                        change: function ($event) {
-                          _vm.delivery_place = "warszawa"
-                        },
-                      },
-                    }),
-                    _vm._v(" "),
-                    _vm._m(1),
-                  ]
-                ),
+                      [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "order__content__first-column place__details",
+                          },
+                          [
+                            _c("span", [
+                              _vm._v(_vm._s(_vm.currentDeliveryPlace.name)),
+                            ]),
+                            _vm._v(" "),
+                            _c("span", [
+                              _vm._v(_vm._s(_vm.currentDeliveryPlace.city)),
+                            ]),
+                            _vm._v(" "),
+                            _vm.currentDeliveryPlace.apartment_number
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.currentDeliveryPlace.street +
+                                        " " +
+                                        _vm.currentDeliveryPlace.house_number +
+                                        "/" +
+                                        _vm.currentDeliveryPlace
+                                          .apartment_number
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
+                            _vm._v(" "),
+                            !_vm.currentDeliveryPlace.apartment_number
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm.currentDeliveryPlace.street +
+                                        " " +
+                                        _vm.currentDeliveryPlace.house_number
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "order__content__first-column place__change",
+                          },
+                          [
+                            _c(
+                              "span",
+                              {
+                                on: {
+                                  click: function ($event) {
+                                    _vm.ifSeeAllDeliveryPlaces = true
+                                  },
+                                },
+                              },
+                              [_vm._v("Zmień")]
+                            ),
+                          ]
+                        ),
+                      ]
+                    ),
               ])
             : _vm._e(),
           _vm._v(" "),
@@ -65609,16 +66781,21 @@ var render = function () {
                       "div",
                       {
                         staticClass:
-                          "order__content__third-column__table__single delivery_price",
+                          "order__content__third-column__table__single delivery-price",
                       },
                       [
-                        _vm._m(2),
+                        _vm._m(0),
                         _vm._v(" "),
-                        _vm._m(3),
+                        _vm._m(1),
                         _vm._v(" "),
                         _c("div", { staticClass: "td" }),
                         _vm._v(" "),
-                        _vm._m(4),
+                        _c("div", { staticClass: "td price" }, [
+                          _c("span", [
+                            _vm._v(_vm._s(_vm.delivery_price) + " "),
+                            _c("span", { staticClass: "grey" }, [_vm._v("zł")]),
+                          ]),
+                        ]),
                       ]
                     )
                   : _vm._e(),
@@ -65641,17 +66818,99 @@ var render = function () {
                   _vm._v("W cenie zawarto podatek VAT"),
                 ]),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  { staticClass: "dark", attrs: { type: "submit" } },
-                  [_vm._v("Złóż zamówienie")]
-                ),
+                _vm.deliveryPlace_id == ""
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "dark disabled",
+                        attrs: { type: "submit", disabled: "" },
+                      },
+                      [_vm._v("Złóż zamówienie")]
+                    )
+                  : _c(
+                      "button",
+                      { staticClass: "dark", attrs: { type: "submit" } },
+                      [_vm._v("Złóż zamówienie")]
+                    ),
               ]
             ),
           ]),
         ]),
       ]
     ),
+    _vm._v(" "),
+    _vm.ifSeeAllDeliveryPlaces
+      ? _c("section", { staticClass: "order__addresses" }, [
+          _c("section", { staticClass: "order__addresses__content" }, [
+            _c("h2", [_vm._v("Miejsca odbioru")]),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "back",
+                on: {
+                  click: function ($event) {
+                    _vm.ifSeeAllDeliveryPlaces = false
+                  },
+                },
+              },
+              [_vm._v("Powrót")]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "order__addresses__content__list" },
+              _vm._l(_vm.places, function (place) {
+                return _c(
+                  "div",
+                  {
+                    key: place.id,
+                    staticClass: "order__addresses__content__list__single",
+                  },
+                  [
+                    _c("span", [_vm._v(_vm._s(place.name))]),
+                    _vm._v(" "),
+                    _c("span", [
+                      _vm._v(
+                        _vm._s(place.street + " " + place.house_number) +
+                          _vm._s(
+                            place.apartment_number
+                              ? "/" + place.apartment_number
+                              : ""
+                          )
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c("span", [
+                      _vm._v(_vm._s(place.zip_code + " " + place.city)),
+                    ]),
+                    _vm._v(" "),
+                    _c("div", [
+                      place.id == _vm.deliveryPlace_id
+                        ? _c("span", { staticClass: "button dark" }, [
+                            _vm._v("Wybrano"),
+                          ])
+                        : _c(
+                            "span",
+                            {
+                              staticClass: "button bright",
+                              on: {
+                                click: function ($event) {
+                                  return _vm.chooseDeliveryPlace(place)
+                                },
+                              },
+                            },
+                            [_vm._v("Wybierz")]
+                          ),
+                    ]),
+                  ]
+                )
+              }),
+              0
+            ),
+          ]),
+        ])
+      : _vm._e(),
     _vm._v(" "),
     _vm.ifSeeAddresses
       ? _c("section", { staticClass: "order__addresses" }, [
@@ -65746,9 +67005,10 @@ var render = function () {
         _c("div", { staticClass: "widget__upper" }, [
           _c("i", { staticClass: "fas fa-exclamation-triangle" }),
           _vm._v(" "),
-          _c("span", { staticClass: "status" }, [
-            _vm._v("Wystąpił błąd! Spróbuj ponownie później!"),
-          ]),
+          _c("span", {
+            staticClass: "status",
+            domProps: { innerHTML: _vm._s(_vm.result.message) },
+          }),
           _vm._v(" "),
           _c("i", {
             staticClass: "fas fa-times close",
@@ -65768,30 +67028,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("Sklep firmowy Kosmo")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Kraków")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Kosmiczna 15")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("Żabka")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Warszawa")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Avengersów 121")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "td" }, [
       _c("i", { staticClass: "fas fa-truck" }),
     ])
@@ -65802,17 +67038,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "td" }, [
       _c("span", [_vm._v("Przesyłka kurierska")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "td price" }, [
-      _c("span", [
-        _vm._v("20.00 "),
-        _c("span", { staticClass: "grey" }, [_vm._v("zł")]),
-      ]),
     ])
   },
 ]
@@ -66060,36 +67285,72 @@ var render = function () {
                                   "account__content__bottom__orders__single__content__first-column place",
                               },
                               [
-                                _vm.currentOrder.delivery_place == "krakow"
-                                  ? _c(
-                                      "label",
+                                _c(
+                                  "label",
+                                  {
+                                    staticClass:
+                                      "account__content__bottom__orders__single__content__first-column place input",
+                                    attrs: { for: "place" },
+                                  },
+                                  [
+                                    _c(
+                                      "div",
                                       {
                                         staticClass:
-                                          "account__content__bottom__orders__single__content__first-column place input",
-                                        attrs: { for: "place1" },
+                                          "ccount__content__bottom__orders__single__content__first-column place__details",
                                       },
-                                      [_vm._m(0)]
-                                    )
-                                  : _vm._e(),
-                                _vm._v(" "),
-                                _vm.currentOrder.delivery_place == "warszawa"
-                                  ? _c(
-                                      "label",
-                                      {
-                                        staticClass:
-                                          "account__content__bottom__orders__single__content__first-column place input",
-                                        attrs: { for: "place2" },
-                                      },
-                                      [_vm._m(1)]
-                                    )
-                                  : _vm._e(),
+                                      [
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(_vm.deliveryPlace.name)
+                                          ),
+                                        ]),
+                                        _vm._v(" "),
+                                        _c("span", [
+                                          _vm._v(
+                                            _vm._s(_vm.deliveryPlace.city)
+                                          ),
+                                        ]),
+                                        _vm._v(" "),
+                                        _vm.deliveryPlace.apartment_number
+                                          ? _c("span", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.deliveryPlace.street +
+                                                    " " +
+                                                    _vm.deliveryPlace
+                                                      .house_number +
+                                                    "/" +
+                                                    _vm.deliveryPlace
+                                                      .apartment_number
+                                                )
+                                              ),
+                                            ])
+                                          : _vm._e(),
+                                        _vm._v(" "),
+                                        !_vm.deliveryPlace.apartment_number
+                                          ? _c("span", [
+                                              _vm._v(
+                                                _vm._s(
+                                                  _vm.deliveryPlace.street +
+                                                    " " +
+                                                    _vm.deliveryPlace
+                                                      .house_number
+                                                )
+                                              ),
+                                            ])
+                                          : _vm._e(),
+                                      ]
+                                    ),
+                                  ]
+                                ),
                               ]
                             )
                           : _vm._e(),
                         _vm._v(" "),
                         _c("h4", [_vm._v("Metoda płatności")]),
                         _vm._v(" "),
-                        _vm._m(2),
+                        _vm._m(0),
                       ]
                     ),
                     _vm._v(" "),
@@ -66103,7 +67364,7 @@ var render = function () {
                           [
                             _c("h4", [_vm._v("Informacje o zamawiającym")]),
                             _vm._v(" "),
-                            _vm._m(3),
+                            _vm._m(1),
                             _vm._v(" "),
                             _c(
                               "div",
@@ -66338,7 +67599,7 @@ var render = function () {
                           [
                             _c("h4", [_vm._v("Informacje o zamawiającym")]),
                             _vm._v(" "),
-                            _vm._m(4),
+                            _vm._m(2),
                             _vm._v(" "),
                             _c(
                               "label",
@@ -66713,16 +67974,27 @@ var render = function () {
                                   "div",
                                   {
                                     staticClass:
-                                      "account__content__bottom__orders__single__content__third-column__table__single delivery_price",
+                                      "account__content__bottom__orders__single__content__third-column__table__single delivery-price",
                                   },
                                   [
-                                    _vm._m(5),
+                                    _vm._m(3),
                                     _vm._v(" "),
-                                    _vm._m(6),
+                                    _vm._m(4),
                                     _vm._v(" "),
                                     _c("div"),
                                     _vm._v(" "),
-                                    _vm._m(7),
+                                    _c("div", { staticClass: "td price" }, [
+                                      _c("span", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.currentOrder.delivery_price
+                                          ) + " "
+                                        ),
+                                        _c("span", { staticClass: "grey" }, [
+                                          _vm._v("zł"),
+                                        ]),
+                                      ]),
+                                    ]),
                                   ]
                                 )
                               : _vm._e(),
@@ -66741,6 +68013,22 @@ var render = function () {
                               _c("b", [_vm._v("Status zamówienia: ")]),
                               _vm._v(_vm._s(_vm.translateStatusToPolish())),
                             ]),
+                            _vm._v(" "),
+                            _vm.currentOrder.status != "cancelled" &&
+                            _vm.currentOrder.status != "returned"
+                              ? _c(
+                                  "span",
+                                  {
+                                    staticClass: "button dark button-small",
+                                    on: {
+                                      click: function ($event) {
+                                        _vm.ifWantCancel = true
+                                      },
+                                    },
+                                  },
+                                  [_vm._v("Anuluj zamówienie")]
+                                )
+                              : _vm._e(),
                           ]
                         ),
                         _vm._v(" "),
@@ -66780,9 +68068,10 @@ var render = function () {
           _c("div", { staticClass: "widget__upper" }, [
             _c("i", { staticClass: "fas fa-exclamation-triangle" }),
             _vm._v(" "),
-            _c("span", { staticClass: "status" }, [
-              _vm._v("Wystąpił błąd! Spróbuj ponownie później!"),
-            ]),
+            _c("span", {
+              staticClass: "status",
+              domProps: { innerHTML: _vm._s(_vm.result.message) },
+            }),
             _vm._v(" "),
             _c("i", {
               staticClass: "fas fa-times close",
@@ -66795,33 +68084,44 @@ var render = function () {
           ]),
         ])
       : _vm._e(),
+    _vm._v(" "),
+    _vm.ifWantCancel
+      ? _c("section", { staticClass: "confirmation vue" }, [
+          _c("section", { staticClass: "confirmation__box" }, [
+            _c("h4", [_vm._v("Czy na pewno chcesz anulować to zamówienie?")]),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "button-small dark danger",
+                attrs: { type: "submit" },
+                on: {
+                  click: function ($event) {
+                    return _vm.cancelOrder(_vm.currentOrder.id)
+                  },
+                },
+              },
+              [_vm._v("Tak")]
+            ),
+            _vm._v(" "),
+            _c(
+              "span",
+              {
+                staticClass: "button button-small dark cancel",
+                on: {
+                  click: function ($event) {
+                    _vm.ifWantCancel = false
+                  },
+                },
+              },
+              [_vm._v("Nie")]
+            ),
+          ]),
+        ])
+      : _vm._e(),
   ])
 }
 var staticRenderFns = [
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("Sklep firmowy Kosmo")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Kraków")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Kosmiczna 15")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("span", [_vm._v("Żabka")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Warszawa")]),
-      _vm._v(" "),
-      _c("span", [_vm._v("Avengersów 121")]),
-    ])
-  },
   function () {
     var _vm = this
     var _h = _vm.$createElement
@@ -66915,17 +68215,6 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "td" }, [
       _c("span", [_vm._v("Przesyłka kurierska")]),
-    ])
-  },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "td price" }, [
-      _c("span", [
-        _vm._v("20.00 "),
-        _c("span", { staticClass: "grey" }, [_vm._v("zł")]),
-      ]),
     ])
   },
 ]
@@ -67274,6 +68563,291 @@ var staticRenderFns = [
     return _c("button", [_c("i", { staticClass: "fas fa-search" })])
   },
 ]
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings.vue?vue&type=template&id=3a09080e&":
+/*!***********************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/Settings.vue?vue&type=template&id=3a09080e& ***!
+  \***********************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("section", { staticClass: "admin__content__settings" }, [
+    _c("div", { staticClass: "admin__content__settings__basic" }, [
+      _c(
+        "div",
+        { staticClass: "admin__content__settings__basic__homepage-background" },
+        [
+          _c("h4", [_vm._v("Zmiana tła strony powitalnej")]),
+          _vm._v(" "),
+          _c(
+            "label",
+            {
+              staticClass:
+                "admin__content__settings__basic__homepage-background__image",
+              attrs: { for: "homepage-background" },
+            },
+            [
+              _vm.settings.homepage_background
+                ? _c("img", {
+                    attrs: {
+                      src: _vm.settings.homepage_background,
+                      alt: "Tło strony powitalnej",
+                    },
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _c("i", { staticClass: "fas fa-camera" }),
+            ]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            attrs: {
+              accept: "image/*",
+              name: "homepage-background",
+              id: "homepage-background",
+              type: "file",
+            },
+            on: {
+              change: function ($event) {
+                return _vm.showCropper()
+              },
+            },
+          }),
+          _vm._v(" "),
+          _c("span", [
+            _vm._v(
+              "Zaleca się zdjęcia o rozdzielczości Full HD i proporcjach 16:9"
+            ),
+          ]),
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "admin__content__settings__basic__welcome" }, [
+        _c(
+          "div",
+          { staticClass: "admin__content__settings__basic__welcome__box-text" },
+          [
+            _c("h4", [_vm._v("Zmiana tekstu okna powitalnego")]),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass:
+                  "admin__content__settings__basic__welcome-box-text__input input",
+                attrs: { for: "welcome-box-text" },
+              },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.settings.welcome_box_text,
+                      expression: "settings.welcome_box_text",
+                    },
+                  ],
+                  attrs: {
+                    type: "text",
+                    name: "welcome-box-text",
+                    id: "welcome-box-text",
+                    placeholder: "Przeglądaj wspaniałe produkty",
+                    required: "",
+                  },
+                  domProps: { value: _vm.settings.welcome_box_text },
+                  on: {
+                    change: function ($event) {
+                      return _vm.changeWelcomeBoxText()
+                    },
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.settings,
+                        "welcome_box_text",
+                        $event.target.value
+                      )
+                    },
+                  },
+                }),
+              ]
+            ),
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass:
+              "admin__content__settings__basic__welcome__box-button-text",
+          },
+          [
+            _c("h4", [_vm._v("Zmiana tekstu przycisku okna powitalnego")]),
+            _vm._v(" "),
+            _c(
+              "label",
+              {
+                staticClass:
+                  "admin__content__settings__basic__welcome-box-button-text__input input",
+                attrs: { for: "welcome-box-button-text" },
+              },
+              [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.settings.welcome_box_button_text,
+                      expression: "settings.welcome_box_button_text",
+                    },
+                  ],
+                  attrs: {
+                    type: "text",
+                    name: "welcome-box-button-text",
+                    id: "welcome-box-button-text",
+                    placeholder: "Przeglądaj",
+                    required: "",
+                  },
+                  domProps: { value: _vm.settings.welcome_box_button_text },
+                  on: {
+                    change: function ($event) {
+                      return _vm.changeWelcomeBoxButtonText()
+                    },
+                    input: function ($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(
+                        _vm.settings,
+                        "welcome_box_button_text",
+                        $event.target.value
+                      )
+                    },
+                  },
+                }),
+              ]
+            ),
+          ]
+        ),
+      ]),
+    ]),
+    _vm._v(" "),
+    _vm.ifCropper
+      ? _c(
+          "section",
+          { staticClass: "admin__content__new-product__background" },
+          [
+            _c(
+              "section",
+              {
+                staticClass:
+                  "admin__content__new-product__background__crop-image",
+              },
+              [
+                _c("Cropper", {
+                  ref: "cropper",
+                  staticClass: "cropper-container",
+                  attrs: {
+                    src: _vm.image,
+                    "max-container-width": 900,
+                    "max-container-height": 600,
+                    canvas: {
+                      minHeight: 800,
+                      minWidth: 450,
+                      maxHeight: 2160,
+                      maxWidth: 3840,
+                    },
+                    "stencil-props": { aspectRatio: 16 / 9 },
+                  },
+                }),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass: "button button-small dark",
+                    on: {
+                      click: function ($event) {
+                        return _vm.crop()
+                      },
+                    },
+                  },
+                  [_vm._v("Przytnij")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "span",
+                  {
+                    staticClass: "button button-small bright",
+                    on: {
+                      click: function ($event) {
+                        _vm.ifCropper = false
+                      },
+                    },
+                  },
+                  [_vm._v("Wróć")]
+                ),
+              ],
+              1
+            ),
+          ]
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _c(
+      "section",
+      {
+        directives: [
+          {
+            name: "show",
+            rawName: "v-show",
+            value: _vm.widget,
+            expression: "widget",
+          },
+        ],
+        staticClass: "widget",
+      },
+      [
+        _c("div", { staticClass: "widget__upper" }, [
+          _vm.result.type == "success"
+            ? _c("i", { staticClass: "fas fa-check" })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.result.type == "fail"
+            ? _c("i", { staticClass: "fas fa-exclamation-triangle" })
+            : _vm._e(),
+          _vm._v(" "),
+          _c("span", {
+            staticClass: "status",
+            domProps: { innerHTML: _vm._s(_vm.result.message) },
+          }),
+          _vm._v(" "),
+          _c("i", {
+            staticClass: "fas fa-times close",
+            on: {
+              click: function ($event) {
+                _vm.widget = false
+              },
+            },
+          }),
+        ]),
+      ]
+    ),
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -79501,13 +81075,15 @@ module.exports = function(module) {
 var map = {
 	"./components/Addresses.vue": "./resources/js/components/Addresses.vue",
 	"./components/Cart.vue": "./resources/js/components/Cart.vue",
+	"./components/DeliveryPlaces.vue": "./resources/js/components/DeliveryPlaces.vue",
 	"./components/EditProduct.vue": "./resources/js/components/EditProduct.vue",
 	"./components/ManageQuantity.vue": "./resources/js/components/ManageQuantity.vue",
 	"./components/NewProduct.vue": "./resources/js/components/NewProduct.vue",
 	"./components/Order.vue": "./resources/js/components/Order.vue",
 	"./components/OrderList.vue": "./resources/js/components/OrderList.vue",
 	"./components/OrderStatus.vue": "./resources/js/components/OrderStatus.vue",
-	"./components/Search.vue": "./resources/js/components/Search.vue"
+	"./components/Search.vue": "./resources/js/components/Search.vue",
+	"./components/Settings.vue": "./resources/js/components/Settings.vue"
 };
 
 
@@ -79751,6 +81327,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Cart_vue_vue_type_template_id_b7f93bea___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Cart_vue_vue_type_template_id_b7f93bea___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/DeliveryPlaces.vue":
+/*!****************************************************!*\
+  !*** ./resources/js/components/DeliveryPlaces.vue ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeliveryPlaces.vue?vue&type=template&id=324d448b& */ "./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b&");
+/* harmony import */ var _DeliveryPlaces_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./DeliveryPlaces.vue?vue&type=script&lang=js& */ "./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _DeliveryPlaces_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/DeliveryPlaces.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeliveryPlaces_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./DeliveryPlaces.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DeliveryPlaces.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_DeliveryPlaces_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b&":
+/*!***********************************************************************************!*\
+  !*** ./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b& ***!
+  \***********************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./DeliveryPlaces.vue?vue&type=template&id=324d448b& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/DeliveryPlaces.vue?vue&type=template&id=324d448b&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_DeliveryPlaces_vue_vue_type_template_id_324d448b___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
@@ -80234,6 +81879,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Search_vue_vue_type_template_id_5026ffd3___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Search_vue_vue_type_template_id_5026ffd3___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Settings.vue":
+/*!**********************************************!*\
+  !*** ./resources/js/components/Settings.vue ***!
+  \**********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Settings.vue?vue&type=template&id=3a09080e& */ "./resources/js/components/Settings.vue?vue&type=template&id=3a09080e&");
+/* harmony import */ var _Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Settings.vue?vue&type=script&lang=js& */ "./resources/js/components/Settings.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Settings.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Settings.vue?vue&type=script&lang=js&":
+/*!***********************************************************************!*\
+  !*** ./resources/js/components/Settings.vue?vue&type=script&lang=js& ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Settings.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Settings.vue?vue&type=template&id=3a09080e&":
+/*!*****************************************************************************!*\
+  !*** ./resources/js/components/Settings.vue?vue&type=template&id=3a09080e& ***!
+  \*****************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Settings.vue?vue&type=template&id=3a09080e& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/Settings.vue?vue&type=template&id=3a09080e&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Settings_vue_vue_type_template_id_3a09080e___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

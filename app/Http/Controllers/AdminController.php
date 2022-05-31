@@ -10,6 +10,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Setting;
+use App\DeliveryPlace;
 
 class AdminController extends Controller
 {
@@ -31,8 +33,6 @@ class AdminController extends Controller
     }
 
     public function deleteCart(Request $req) {
-        if (Auth::user() -> role != 'admin')
-            return redirect('/');
         if (Cart::find($req -> cart_id) -> ordered == 0)
             Cart::destroy($req -> cart_id);
         if (count(Cart::all()) != 0)
@@ -52,8 +52,6 @@ class AdminController extends Controller
     }
 
     public function deleteOrder(Request $req) {
-        if (Auth::user() -> role != 'admin')
-            return redirect('/');
         $cart = Cart::find(Order::find($req -> order_id) -> cart_id);
         $cart -> ordered = 0;
         $cart -> save();
@@ -75,13 +73,21 @@ class AdminController extends Controller
     }
 
     public function deleteProduct(Request $req) {
-        if (Auth::user() -> role != 'admin')
-            return redirect('/');
         Product::destroy($req -> product_id);
         if (count(Product::all()) != 0)
             return redirect('/admin/produkty');
         else
             return redirect('/admin');
+    }
+
+    public function settings() {
+        $settings = Setting::all();
+        return view('settings')->with('settings', $settings);
+    }
+
+    public function deliveryPlaces() {
+        $deliveryPlaces = DeliveryPlace::all();
+        return view('delivery-places')->with('deliveryPlaces', $deliveryPlaces);
     }
 
     // API
@@ -92,6 +98,7 @@ class AdminController extends Controller
             abort(401);
         if (!$req -> user_id)
             abort(401);
+
         if (User::find($req -> user_id) -> role == 'admin') {
             if (count(Product::all()) != 0)
                 return Product::all() -> last() -> id + 1;
@@ -108,6 +115,7 @@ class AdminController extends Controller
             abort(401);
         if (User::find($req -> user_id) -> role != 'admin')
             abort(401);
+
         $product = new Product();
         if ($req -> id)
             $product -> id = $req -> id;
@@ -151,9 +159,11 @@ class AdminController extends Controller
             abort(401);
         if (!$req -> product_id)
             abort(404);
+
         $product = Product::find($req -> product_id);
         if (!$product)
             abort(404);
+
         $product -> name = $req -> name;
         $product -> description = $req -> description;
         if ($product -> image != $req -> image) {
@@ -186,6 +196,7 @@ class AdminController extends Controller
             $order = Order::find($req -> order_id);
             if (!$order)
                 abort(404);
+
             $order -> status = $req -> status;
 
             if ($order -> included) {

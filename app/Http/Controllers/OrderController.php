@@ -9,6 +9,7 @@ use App\CartPart;
 use App\Order;
 use App\User;
 use App\Product;
+use App\Setting;
 
 class OrderController extends Controller
 {
@@ -17,6 +18,7 @@ class OrderController extends Controller
     public function index(Request $req) {
         if (!$req -> _token)
             return ['status' => 400];
+
         if ($req -> user_id)
             $cart_id = User::find($req -> user_id) -> cart -> id;
         else {
@@ -33,6 +35,7 @@ class OrderController extends Controller
     public function total(Request $req) {
         if (!$req -> _token)
             return ['status' => 400];
+
         if ($req -> user_id)
             $total = User::find($req -> user_id) -> cart -> total;
         else {
@@ -43,6 +46,10 @@ class OrderController extends Controller
             $total = $cart -> total;
         }
         return ['total' => $total];
+    }
+
+    public function getDeliveryPrice() {
+        return Setting::where('name', 'delivery_price')->pluck('value')->first();
     }
 
     public function ifUserHaveAddress(Request $req) {
@@ -63,6 +70,7 @@ class OrderController extends Controller
     public function create(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         if ($req -> user_id) {
             $cart_id = User::find($req -> user_id) -> cart -> id;
             $cart = Cart::find($cart_id);
@@ -87,7 +95,7 @@ class OrderController extends Controller
         $order -> email = $req -> email;
         $order -> delivery_method = $req -> delivery_method;
         if ($req -> delivery_method != 'courier')
-            $order -> delivery_place = $req -> delivery_place;
+            $order -> deliveryPlace_id = $req -> deliveryPlace_id;
         $order -> payment_method = $req -> payment_method;
         $order -> purchaser_type = $req -> type;
         $order -> name = $req -> name;
@@ -178,7 +186,48 @@ class OrderController extends Controller
             abort(401);
         if (!$req -> user_id)
             abort(401);
+
         $orders = User::find($req -> user_id) -> orders;
         return $orders;
+    }
+
+    public function cancelOrder(Request $req) {
+        if (!$req -> _token)
+            abort(401);
+        if (!$req -> user_id)
+            abort(401);
+
+        $order = Order::find($req -> order_id);
+        if ($order == NULL)
+            abort(404);
+
+        if ($order -> status == 'returned' || $order -> status == 'cancelled')
+            abort(401);
+
+        $order -> status = 'cancelled';
+
+        if ($order -> included) {
+            foreach (Cart::find($order -> cart_id) -> products as $product) {
+                $product_id = $product -> product_id;
+                $items = $product -> items;
+
+                $bought_product = Product::find($product_id);
+
+                // change purchased
+                $bought_product -> purchased -= $items;
+
+                // change availability
+                $bought_product -> quantity += $items;
+
+                if ($bought_product -> quantity > 0)
+                    $bought_product -> availability = 1;
+
+                $bought_product -> save();
+            }
+            $order -> included = 0;
+        }
+        $order -> save();
+
+        return ['status' => 200];
     }
 }

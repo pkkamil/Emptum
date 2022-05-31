@@ -8,8 +8,8 @@
     <article class="home__welcome">
         @if (count($bestsellers) != 0)
             <section class="home__welcome__box">
-                <h2>Przeglądaj niesamowite produkty</h2>
-                <span class="button dark">Przeglądaj</span>
+                <h2>{{ \App\Setting::where('name', 'welcome_box_text')->pluck('value')->first() }}</h2>
+                <span class="button dark">{{ \App\Setting::where('name', 'welcome_box_button_text')->pluck('value')->first() }}</span>
             </section>
         @endif
     </article>

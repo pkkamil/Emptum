@@ -12,12 +12,14 @@ class AddressController extends Controller
     public function index(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         return Address::where('user_id', $req -> user_id)->get();
     }
 
     public function store(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         $address = new Address();
         $address -> type = $req -> type;
         $address -> name = $req -> name;
@@ -38,6 +40,7 @@ class AddressController extends Controller
     public function show(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         $address = Address::where('user_id', $req -> user_id) -> where('id', $req -> address_id)->first();
         if (!$address)
             abort(404);
@@ -48,6 +51,7 @@ class AddressController extends Controller
     public function update(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         $address = Address::where('user_id', $req -> user_id) -> where('id', $req -> address_id)->first();
         $address -> type = $req -> type;
         $address -> name = $req -> name;
@@ -68,6 +72,7 @@ class AddressController extends Controller
     public function destroy(Request $req) {
         if (!$req -> _token)
             abort(401);
+
         $address = Address::find($req -> address_id);
         if (!$address)
             abort(404);

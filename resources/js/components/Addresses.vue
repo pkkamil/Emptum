@@ -19,13 +19,13 @@
                         <input type="text" name="surname" id="surname" placeholder="Nazwisko" required v-model="address.surname">
                     </label>
                 </div>
-                <label for="telephone" class="addresses__content__bottom__new__form__input px1">
+                <label for="telephone" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="telephone" id="telephone" placeholder="Numer telefonu" v-model="address.telephone">
                 </label>
-                <label for="street" class="addresses__content__bottom__new__form__input px2">
+                <label for="street" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="street" id="street" placeholder="Ulica" required v-model="address.street">
                 </label>
-                <div class="addresses__content__bottom__new__form__three px3a">
+                <div class="addresses__content__bottom__new__form__three">
                     <label for="house_number" class="addresses__content__bottom__new__form__three__input-small">
                         <input type="text" name="house_number" id="house_number" placeholder="Nr domu" v-model="address.house_number">
                     </label>
@@ -36,7 +36,7 @@
                         <input type="text" name="zip_code" id="zip_code" placeholder="Kod pocztowy" required v-model="address.zip_code">
                     </label>
                 </div>
-                <label for="city" class="addresses__content__bottom__new__form__input px4">
+                <label for="city" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="city" id="city" placeholder="Miejscowość" required v-model="address.city">
                 </label>
                 <button class="dark">Zapisz adres</button>
@@ -53,10 +53,10 @@
                 <label for="company_name" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="company_name" id="company_name" placeholder="Nazwa firmy" v-model="address.company_name">
                 </label>
-                <label for="nip_code" class="addresses__content__bottom__new__form__input px1">
+                <label for="nip_code" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="nip_code" id="nip_code" placeholder="NIP" required v-model="address.nip_code" maxLength="10">
                 </label>
-                <div class="addresses__content__bottom__new__form__two px2">
+                <div class="addresses__content__bottom__new__form__two">
                     <label for="name" class="addresses__content__bottom__new__form__two__input-small">
                         <input type="text" name="name" id="name" placeholder="Imię" required v-model="address.name">
                     </label>
@@ -64,13 +64,13 @@
                         <input type="text" name="surname" id="surname" placeholder="Nazwisko" required v-model="address.surname">
                     </label>
                 </div>
-                <label for="telephone" class="addresses__content__bottom__new__form__input px3">
+                <label for="telephone" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="telephone" id="telephone" placeholder="Numer telefonu" v-model="address.telephone">
                 </label>
-                <label for="street" class="addresses__content__bottom__new__form__input px4">
+                <label for="street" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="street" id="street" placeholder="Ulica" required v-model="address.street">
                 </label>
-                <div class="addresses__content__bottom__new__form__three px5">
+                <div class="addresses__content__bottom__new__form__three">
                     <label for="house_number" class="addresses__content__bottom__new__form__three__input-small">
                         <input type="text" name="house_number" id="house_number" placeholder="Nr domu" v-model="address.house_number">
                     </label>
@@ -81,7 +81,7 @@
                         <input type="text" name="zip_code" id="zip_code" placeholder="Kod pocztowy" required v-model="address.zip_code">
                     </label>
                 </div>
-                <label for="city" class="addresses__content__bottom__new__form__input px6">
+                <label for="city" class="addresses__content__bottom__new__form__input">
                     <input type="text" name="city" id="city" placeholder="Miejscowość" required v-model="address.city">
                 </label>
                 <button class="dark">Zapisz adres</button>
@@ -96,7 +96,7 @@
                     <span>{{ address.zip_code + ' ' + address.city }}</span>
                     <div>
                         <span :class="[editing_id === address.id ? 'dark' : 'bright', 'button']"  @click="editAddress(address.id)">Edytuj</span>
-                        <span class="button bright" @click="deleteAddress(address.id)">usuń</span>
+                        <span class="button bright" @click="ifWantDelete = true;">usuń</span>
                     </div>
                 </div>
             </div>
@@ -107,6 +107,13 @@
                 <span class="status">Wystąpił błąd! Spróbuj ponownie później!</span>
                 <i class="fas fa-times close" @click="widget = false"></i>
             </div>
+        </section>
+        <section class="confirmation vue" v-if="ifWantDelete">
+            <section class="confirmation__box">
+                <h4>Czy na pewno chcesz usunąć to miejsce odbioru?</h4>
+                    <button type="submit" class="button-small dark danger" @click="deleteAddress(address.id)">Tak</button>
+                    <span class="button button-small dark cancel" @click="ifWantDelete = false">Nie</span>
+            </section>
         </section>
     </section>
 </template>
@@ -137,6 +144,7 @@
                 editing: false,
                 editing_id: 0,
                 widget: false,
+                ifWantDelete: false,
             };
         },
         mounted() {
@@ -154,14 +162,14 @@
                         .then(res => {
                             if (!res.ok) {
                                 if (res.status == 401)
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!'
                                 else if (res.status == 429)
-                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!'
                                 else
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                                this.widget = true;
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!'
+                                this.widget = true
                             }
-                            return res;
+                            return res
                         })
                         .then(res => res.json())
                         .then(res => {
@@ -171,7 +179,7 @@
                             }
                         })
                         .catch(err => {
-                            this.widget = true;
+                            this.widget = true
                         });
                 } else {
                     const requestOptions = {
@@ -183,25 +191,26 @@
                         .then(res => {
                             if (!res.ok) {
                                 if (res.status == 401)
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!'
                                 else if (res.status == 429)
-                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!'
                                 else
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                                this.widget = true;
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!'
+                                this.widget = true
                             }
-                            return res;
+                            return res
                         })
                         .then(res => res.json())
                         .then(res => {
                             if (!res.exception) {
                                 this.clearForm()
                                 this.updateList()
-                                this.editing = false;
+                                this.editing = false
+                                this.editing_id = 0
                             }
                         })
                         .catch(err => {
-                            this.widget = true;
+                            this.widget = true
                         });
                 }
             },
@@ -215,22 +224,22 @@
                     .then(res => {
                         if (!res.ok) {
                             if (res.status == 401)
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!'
                             else if (res.status == 429)
-                                document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!'
                             else
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                            this.widget = true;
+                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!'
+                            this.widget = true
                         }
-                        return res;
+                        return res
                     })
                     .then(res => res.json())
                     .then(res => {
                         if (!res.exception)
-                            this.addresses = res;
+                            this.addresses = res
                     })
                     .catch(err => {
-                        this.widget = true;
+                        this.widget = true
                     });
             },
             clearForm() {
@@ -260,12 +269,12 @@
                         .then(res => {
                             if (!res.ok) {
                                 if (res.status == 401)
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!'
                                 else if (res.status == 429)
-                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!'
                                 else
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                                this.widget = true;
+                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!'
+                                this.widget = true
                             }
                             return res;
                         })
@@ -278,7 +287,7 @@
                             }
                         })
                         .catch(err => {
-                            this.widget = true;
+                            this.widget = true
                         });
                 }
             },
@@ -292,22 +301,25 @@
                     .then(res => {
                         if (!res.ok) {
                             if (res.status == 401)
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!'
                             else if (res.status == 429)
-                                document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!'
                             else
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                            this.widget = true;
+                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!'
+                            this.widget = true
                         }
-                        return res;
+                        return res
                     })
                     .then(res => res.json())
                     .then(res => {
                         if (!res.exception)
                             this.updateList()
+                        this.ifWantDelete = false
+                        this.editing = false
+                        this.clearForm()
                     })
                     .catch(err => {
-                        this.widget = true;
+                        this.widget = true
                     });
             }
         },

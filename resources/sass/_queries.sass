@@ -1,3 +1,8 @@
+@media only screen and (min-width: 1921px)
+    .home
+        &__welcome
+            background-size: cover
+
 @media only screen and (max-width: 1360px)
     .dark, .bright
         padding: 15px 50px
@@ -294,6 +299,7 @@
             & h2
                 font-size: 1.5rem
             & .table
+                min-height: 150px
                 & .td
                     font-size: .9rem
                 & .quantity
@@ -382,6 +388,21 @@
                         display: none
                     & .td.name
                         width: 300px
+            &__settings
+                &__basic
+                    flex-direction: column
+                    &__welcome
+                        margin-left: 0
+                        margin-top: 40px
+                        & div:not(:first-of-type)
+                            margin-top: 20px
+            &__delivery-places
+                flex-direction: column
+                &__new
+                    order: 2
+                &__box
+                    order: 1
+                    margin-bottom: 30px
 
     .addresses
         &__content
@@ -393,6 +414,7 @@
                 &__box
                     order: 1
                     margin-bottom: 30px
+
     .order, .account__content__bottom__orders__single
         &__content
             width: 768px
@@ -552,6 +574,7 @@
             margin-top: 40px
             padding: 0 40px
             & .table
+                min-height: 120px
                 & .quantity
                     width: 180px
                     & label
@@ -611,21 +634,20 @@
                 margin-bottom: 10px
             & h2
                 font-size: 1.3rem
+            .widget
+                top: 0!important
+                right: 50%
+                transform: translate(50%, 0)!important
+                padding: 18px 22px
             & a.back
                 margin-bottom: 30px
             &__start
                 width: 100%
                 &__single
-                    margin-bottom: 30px
                     & a
                         width: 100%
                         font-size: 1rem
             &__new-product
-                .widget
-                    top: 0!important
-                    right: 50%
-                    transform: translate(50%, 0)!important
-                    padding: 18px 22px
                 &__background
                     &__crop-image
                         & .cropper-container
@@ -664,6 +686,23 @@
                         display: none
                     & .td.name
                         width: 300px
+            &__settings
+                &__basic
+                    &__welcome
+                        margin-top: 30px
+            &__delivery-places
+                &__new
+                    margin-right: 0
+                    & h4
+                        margin-bottom: 15px
+                &__box
+                    margin-bottom: 25px
+                    &__list
+                        &__single
+                            margin-bottom: 10px
+                            & div
+                                & span
+                                    font-size: 1rem
     .addresses
         min-height: 100vh
         &__content
@@ -864,6 +903,7 @@
             &:not(.not-empty)
                 width: 425px
             & .table
+                min-height: 100px
                 border-top: 1px solid #c4c4c4
                 border-bottom: 0
                 padding-bottom: 0
@@ -933,11 +973,11 @@
         &__content
             width: 425px
             padding: 0 30px
+            & .widget
+                width: 365px
             & a.back
                 margin-bottom: 25px
             &__new-product
-                & .widget
-                    width: 365px
                 &__background
                     &__crop-image
                         width: 100%
@@ -966,6 +1006,54 @@
                         display: none
                     & .td.name
                         width: 200px
+            &__settings
+                &__basic
+                    & h4
+                        font-size: 1.1rem
+                    &__homepage-background
+                        & span
+                            font-size: .9rem
+                        &__image
+                            width: 336px
+                            height: 189px
+                            & img
+                                width: 336px
+                                height: 189px
+
+                    & .input
+                        padding: 20px 18px
+                        & input
+                            font-size: .9rem
+            &__delivery-places
+                &__new
+                    &__form
+                        width: 100%
+                        &__type
+                            &__input
+                                padding: 20px 18px
+                                width: 100%
+                                font-size: .9rem
+                                & input
+                                    font-size: .9rem
+                        &__three
+                            width: 100%
+                            &__input-small
+                                padding: 20px 18px
+                                width: calc(100% / 3)
+                                & input
+                                    font-size: .9rem
+                        &__input
+                            padding: 20px 18px
+                            width: 100%
+                            & input
+                                font-size: .9rem
+                        & button
+                            margin-top: 20px
+                &__box
+                    margin-bottom: 20px
+                    &__list
+                        &__single div span
+                            padding: 14px 36px
     .addresses
         &__content
             width: 425px
@@ -1056,6 +1144,9 @@
                                 color: #999
                                 font-size: .9rem
                                 font-weight: lighter
+                        &.delivery-price
+                            & .td:not(.price)
+                                transform: translateY(3px)
                 &__informations
                     margin-bottom: 20px
                     margin-left: 0
@@ -1284,18 +1375,16 @@
             padding: 0 20px
             & h2
                 font-size: 1.2rem
+            & .widget
+                width: 285px
+                &__upper
+                    & .to-hide
+                        display: none
             &__start
                 &__single
                     width: 100%
                     margin-bottom: 20px
-                    &:nth-child(1), &:nth-child(2)
-                        margin-bottom: 20px
             &__new-product
-                & .widget
-                    width: 285px
-                    &__upper
-                        & .to-hide
-                            display: none
                 gap: 10px
                 &__background
                     &__crop-image
@@ -1337,6 +1426,29 @@
                     grid-template-columns: repeat(2, auto)
                     & .id
                         display: none
+            &__settings
+                &__basic
+                    & h4
+                        font-size: 1rem
+                    &__homepage-background
+                        &__image
+                            width: 285px
+                            height: calc(285px / 16 * 9)
+                            & img
+                                width: 285px
+                                height: calc(285px / 16 * 9)
+                    & .input
+                        padding: 18px 16px
+            &__delivery-places
+                &__new
+                    &__form
+                        &__three
+                            &__input-small
+                                padding: 18px 16px
+                        &__input
+                            padding: 18px 16px
+                        & .toHide
+                            display: none
     .addresses
         &__content
             width: 325px
@@ -1576,23 +1688,15 @@
     .admin
         &__content
             width: 100%
-            padding: 0 20px
             & h4
                 font-size: 1.1rem
-            &__start
-                &__single
-                    width: 100%
-                    margin-bottom: 20px
-                    &:nth-child(1), &:nth-child(2)
-                        margin-bottom: 20px
-            &__new-product
-                .widget
-                    width: 100%
-                    &__upper
-                        text-align: left
-                        & .fa-check, .fa-exclamation-triangle
-                            font-size: .9rem
-                            transform: translateY(-1px)
+            .widget
+                width: 100%
+                &__upper
+                    text-align: left
+                    & .fa-check, .fa-exclamation-triangle
+                        font-size: .9rem
+                        transform: translateY(-1px)
             &__carts, &__products
                 & .table
                     &  .td.right
@@ -1610,7 +1714,26 @@
                 & .table
                     & .td.name
                         width: auto
-
+            &__settings
+                &__basic
+                    & h4
+                        font-size: 1rem
+                    &__homepage-background
+                        &__image
+                            position: relative
+                            width: 100%
+                            height: calc(285px / 16 * 9)
+                            & img
+                                width: 100%
+                                object-fit: cover
+                                height: calc(285px / 16 * 9)
+                    & .input
+                        padding: 16px 14px
+            &__delivery-places
+                &__box
+                    &__list__single div span
+                        padding: 12px 30px
+                        font-size: .9rem
     .addresses
         &__content
             width: 100%
@@ -1688,7 +1811,7 @@
         width: 100%
     footer
         font-size: .8rem
-    .addresses__content__bottom__box__list__single div span
+    .addresses__content__bottom__box__list__single div span, .admin__content__delivery-places__box__list__single div span
         width: auto
     .results
         &__box

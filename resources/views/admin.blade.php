@@ -33,6 +33,14 @@
                     <a href="{{ url('/admin/produkty') }}" class="button button-small dark">Lista produktów</a>
                 </div>
             @endif
+            <div class="admin__content__start__single">
+                <h4>Zmień ustawienia strony</h4>
+                <a href="{{ url('/admin/ustawienia') }}" class="button button-small dark">Ustawienia strony</a>
+            </div>
+            <div class="admin__content__start__single">
+                <h4>Zarządzanie miejscami odbioru</h4>
+                <a href="{{ url('/admin/miejsca/odbior') }}" class="button button-small dark">Miejsca odbioru</a>
+            </div>
         </div>
     </section>
 </article>

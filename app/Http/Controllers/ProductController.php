@@ -147,9 +147,9 @@ class ProductController extends Controller
     }
 
     public function UpdateCart(Request $req) {
-        if (!$req -> _token) {
+        if (!$req -> _token)
             abort(401);
-        }
+
         $product = CartPart::find($req -> product_id);
         $cart = Cart::find($req -> cart_id);
         if ($cart) {
@@ -172,6 +172,7 @@ class ProductController extends Controller
     public function removeFromCart(Request $req) {
         if (!$req -> _token)
             return ['status' => 400];
+
         $product = CartPart::find($req -> product_id);
         $cart = Cart::find($req -> cart_id);
         if ($cart) {

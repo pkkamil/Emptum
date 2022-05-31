@@ -26,23 +26,13 @@
                 @if ($order -> delivery_method == 'pickup_in_person')
                     <h4>Miejsce odbioru</h4>
                     <div class="order__content__first-column place">
-                        @if ($order -> delivery_place == 'krakow')
-                            <label for="place1" class="order__content__first-column place input">
-                                <div>
-                                    <span>Sklep firmowy Kosmo</span>
-                                    <span>Kraków</span>
-                                    <span>Kosmiczna 15</span>
-                                </div>
-                            </label>
-                        @else
-                            <label for="place2" class="order__content__first-column place input">
-                                <div>
-                                    <span>Żabka</span>
-                                    <span>Warszawa</span>
-                                    <span>Avengersów 121</span>
-                                </div>
-                            </label>
-                        @endif
+                        <label for="place" class="order__content__first-column place input">
+                            <div class="order__content__first-column place__details">
+                                <span>{{ $order -> deliveryPlace -> name }}</span>
+                                <span>{{ $order -> deliveryPlace -> city }}</span>
+                                <span>{{ $order -> deliveryPlace -> street . ' '. $order -> deliveryPlace -> house_number }}{{ $order -> deliveryPlace -> apartment_number ? '/'.$order -> deliveryPlace -> apartment_number : '' }}</span>
+                            </div>
+                        </label>
                     </div>
                 @endif
                 <h4>Metoda płatności</h4>
@@ -177,7 +167,7 @@
                         </div>
                     @endforeach
                     @if ($order -> delivery_method == 'courier')
-                        <div class="order__content__third-column__table__single delivery_price">
+                        <div class="order__content__third-column__table__single delivery-price">
                             <div class="td">
                                 <i class="fas fa-truck"></i>
                             </div>
@@ -186,7 +176,7 @@
                             </div>
                             <div></div>
                             <div class="td price">
-                                <span>20.00 <span class="grey">zł</span></span>
+                                <span>{{ $order -> delivery_price }} <span class="grey">zł</span></span>
                             </div>
                         </div>
                     @endif

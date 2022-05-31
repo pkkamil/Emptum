@@ -40,6 +40,8 @@ Route::prefix('admin')->middleware(['admin'])->group(function () {
     Route::get('/produkty', 'AdminController@products');
     Route::get('/produkty/{id}', 'AdminController@product');
     Route::post('/produkty/delete', 'AdminController@deleteProduct')->name('deleteProduct');
+    Route::get('/ustawienia', 'AdminController@settings');
+    Route::get('/miejsca/odbior', 'AdminController@deliveryPlaces');
 });
 
 Route::get('/adresy', 'AccountController@addresses');

@@ -77,7 +77,7 @@ select:-webkit-autofill:focus
     font-weight: 400
     cursor: pointer
     transition: .6s background-color
-    &:hover
+    &:not(.disabled):hover
         background-color: #444
 
 .bright
@@ -97,7 +97,7 @@ select:-webkit-autofill:focus
     font-weight: 400
     cursor: pointer
     transition: .6s color, .6s box-shadow
-    &:hover
+    &:not(.disabled):hover
         -webkit-box-shadow: inset 0px 0px 0px 2px #555
         -moz-box-shadow: inset 0px 0px 0px 2px #555
         box-shadow: inset 0px 0px 0px 2px #555
@@ -106,6 +106,10 @@ select:-webkit-autofill:focus
 .button-small
     font-size: 1rem
     padding: 17px 47px
+
+span.buton.disabled, button.disabled
+    background-color: #555
+    cursor: default
 
 .navbar
     position: fixed
@@ -287,6 +291,7 @@ select:-webkit-autofill:focus
                     outline: none
                     border: 0
                     font-weight: lighter
+                    color: #555
                     font-size: 1rem
                     &:focus
                         color: $primary
@@ -340,6 +345,7 @@ select:-webkit-autofill:focus
                     outline: none
                     border: 0
                     font-weight: lighter
+                    color: #555
                     font-size: 1rem
                     &:focus
                         color: $primary
@@ -721,6 +727,7 @@ select:-webkit-autofill:focus
                             outline: none
                             border: 0
                             font-weight: lighter
+                            color: #555
                             font-size: 1rem
                             &:focus
                                 color: $primary
@@ -739,6 +746,7 @@ select:-webkit-autofill:focus
                         outline: none
                         border: 0
                         font-weight: lighter
+                        color: #555
                         font-size: 1rem
                         &:focus
                             color: $primary
@@ -817,6 +825,7 @@ select:-webkit-autofill:focus
                     border: 0
                     font-weight: lighter
                     font-size: 1rem
+                    color: #555
                     background: transparent
                     &:focus
                         color: $primary
@@ -845,6 +854,17 @@ select:-webkit-autofill:focus
                     & span:last-of-type
                         color: #777
                         font-size: .9rem
+            &__change
+                margin-left: auto
+                display: flex
+                align-items: center
+                & span
+                    font-size: .9rem
+                    color: #999
+                    transition: .6s color
+                    cursor: pointer
+                    &:hover
+                        color: #c4c4c4
         &__incorrect
             display: block
             color: #a00404
@@ -870,6 +890,7 @@ select:-webkit-autofill:focus
                     border: 0
                     font-weight: lighter
                     font-size: 1rem
+                    color: #555
                     background-color: transparent
                     &:focus
                         color: $primary
@@ -893,6 +914,7 @@ select:-webkit-autofill:focus
                     border: 0
                     font-weight: lighter
                     font-size: 1rem
+                    color: #555
                     background-color: transparent
                     &:focus
                         color: $primary
@@ -995,8 +1017,8 @@ select:-webkit-autofill:focus
                         &:last-of-type
                             min-width: 100px
                             text-align: right
-                    &.delivery_cost
-                        height: 53px
+                    &.delivery-price
+                        min-height: 53px
             &__summary
                 margin-top: 20px
                 margin-right: 16px
@@ -1025,7 +1047,7 @@ select:-webkit-autofill:focus
                 float: left
                 margin-top: 20px
                 margin-left: 15px
-                & span:not(.widget-span)
+                & span:not(.widget-span):not(.button)
                     display: block
                     font-weight: lighter
                     & b
@@ -1037,6 +1059,8 @@ select:-webkit-autofill:focus
                     &.ordered_at
                         margin-top: 5px
                         font-size: 1rem
+                & span.button
+                    margin-top: 20px
     &__addresses
         @include flex-center
         align-items: flex-start
@@ -1132,20 +1156,6 @@ select:-webkit-autofill:focus
                 &__form
                     width: 400px
                     flex-direction: column
-                    & .px1
-                        transform: translateY(-1px)
-                    & .px2
-                        transform: translateY(-2px)
-                    & .px3
-                        transform: translateY(-3px)
-                    & .px3a label
-                        transform: translateY(-3px)
-                    & .px4
-                        transform: translateY(-4px)
-                    & .px5 label
-                        transform: translateY(-5px)
-                    & .px6
-                        transform: translateY(-6px)
                     &__type
                         margin-bottom: 20px
                         &__input
@@ -1154,10 +1164,13 @@ select:-webkit-autofill:focus
                             padding: 22px 20px
                             color: #555
                             width: 400px
+                            &:not(:last-of-type)
+                                border-bottom: 0
                             & input
                                 outline: none
                                 border: 0
                                 font-weight: lighter
+                                color: #555
                                 font-size: 1rem
                                 &:focus
                                     color: $primary
@@ -1174,6 +1187,7 @@ select:-webkit-autofill:focus
                         &__input-small
                             display: table-cell
                             border: 1px solid #999
+                            border-bottom: 0
                             padding: 22px 20px
                             color: #555
                             width: 50%
@@ -1188,6 +1202,7 @@ select:-webkit-autofill:focus
                                 outline: none
                                 border: 0
                                 font-weight: lighter
+                                color: #555
                                 font-size: 1rem
                                 &:focus
                                     color: $primary
@@ -1197,6 +1212,7 @@ select:-webkit-autofill:focus
                             transform: translateY(-1px)
                             display: table-cell
                             border: 1px solid #999
+                            border-bottom: 0
                             padding: 22px 20px
                             color: #555
                             width: calc(100% / 3)
@@ -1210,6 +1226,7 @@ select:-webkit-autofill:focus
                                 outline: none
                                 border: 0
                                 font-weight: lighter
+                                color: #555
                                 font-size: 1rem
                                 &:focus
                                     color: $primary
@@ -1220,6 +1237,8 @@ select:-webkit-autofill:focus
                         color: #555
                         width: 400px
                         transition: .6s box-shadow
+                        &:not(:last-of-type)
+                            border-bottom: 0
                         &:focus-within
                             box-shadow: 0px 0px 4px 0px rgba(66, 68, 90, 1)
                         & input
@@ -1227,6 +1246,7 @@ select:-webkit-autofill:focus
                             outline: none
                             border: 0
                             font-weight: lighter
+                            color: #555
                             font-size: 1rem
                             &:focus
                                 color: $primary
@@ -1500,6 +1520,8 @@ select:-webkit-autofill:focus
     height: 100vh
     background-color: rgba(51, 51, 51, 0.5)
     z-index: 100
+    &.vue
+        display: flex
     &__box
         text-align: center
         padding: 30px 40px
@@ -1552,8 +1574,7 @@ select:-webkit-autofill:focus
             width: 600px
             &__single
                 width: 300px
-                &:nth-child(1), &:nth-child(2)
-                    margin-bottom: 30px
+                margin-bottom: 30px
         &__new-product
             display: flex
             width: 100%
@@ -1619,6 +1640,7 @@ select:-webkit-autofill:focus
                             outline: none
                             border: 0
                             font-weight: lighter
+                            color: #555
                             font-size: 1rem
                             &[type='number']
                                 /* Firefox */
@@ -1647,6 +1669,7 @@ select:-webkit-autofill:focus
                         outline: none
                         border: 0
                         font-weight: lighter
+                        color: #555
                         font-size: 1rem
                         &:focus
                             color: $primary
@@ -1748,6 +1771,172 @@ select:-webkit-autofill:focus
                                     margin-right: 5px
                                 &:hover
                                     color: #999
+        &__settings
+            display: flex
+            &__basic
+                display: flex
+                & input[type='file']
+                    display: none
+                &__welcome
+                    margin-left: 50px
+                    & div:not(:first-of-type)
+                        margin-top: 25px
+                &__homepage-background
+                    & span
+                        display: block
+                        margin-top: 10px
+                        color: #999
+                        font-weight: lighter
+                    &__image
+                        width: 480px
+                        height: 270px
+                        @include flex-center
+                        background-color: $primary
+                        cursor: pointer
+                        & img
+                            position: absolute
+                            width: 480px
+                            height: 270px
+                        &:hover i
+                            z-index: 9
+                            color: #c4c4c4
+                        & i
+                            color: #FFF
+                            font-size: 5rem
+                            transition: .6s color
+                & .input
+                    display: block
+                    border: 1px solid #999
+                    padding: 22px 20px
+                    color: #555
+                    width: 100%
+                    margin-top: 20px
+                    transition: .6s box-shadow
+                    &:first-of-type
+                        margin-top: 0
+                    &:focus-within
+                        box-shadow: 0px 0px 4px 0px rgba(66, 68, 90, 1)
+                    & input
+                        width: 100%
+                        outline: none
+                        border: 0
+                        font-weight: lighter
+                        font-size: 1rem
+                        color: #555
+                        &:focus
+                            color: $primary
+                        &[type='file']
+                            display: none
+        &__delivery-places
+            display: flex
+            &__new
+                margin-right: 200px
+                &__form
+                    width: 400px
+                    flex-direction: column
+                    &__type
+                        margin-bottom: 20px
+                        &__input
+                            display: block
+                            border: 1px solid #999
+                            padding: 22px 20px
+                            color: #555
+                            width: 400px
+                            &:not(:last-of-type)
+                                border-bottom: 0
+                            & input
+                                outline: none
+                                border: 0
+                                font-weight: lighter
+                                font-size: 1rem
+                                color: #555
+                                &:focus
+                                    color: $primary
+                            & i
+                                margin: 0 5px 0 15px
+                            &:last-of-type
+                                transform: translateY(-1px)
+                    &__incorrect
+                        display: block
+                        color: #a00404
+                        margin-top: 10px
+                    &__three
+                        width: 400px
+                        &__input-small
+                            transform: translateY(-1px)
+                            display: table-cell
+                            border: 1px solid #999
+                            border-bottom: 0
+                            padding: 22px 20px
+                            color: #555
+                            width: calc(100% / 3)
+                            transition: .6s box-shadow
+                            &:first-of-type, &:nth-of-type(2)
+                                border-right: 0
+                            &:focus-within
+                                box-shadow: 0px 0px 4px 0px rgba(66, 68, 90, 1)
+                            & input
+                                width: 100%
+                                outline: none
+                                border: 0
+                                font-weight: lighter
+                                color: #555
+                                font-size: 1rem
+                                &:focus
+                                    color: $primary
+                    &__input
+                        display: block
+                        border: 1px solid #999
+                        padding: 22px 20px
+                        color: #555
+                        width: 400px
+                        transition: .6s box-shadow
+                        &:not(:last-of-type)
+                            border-bottom: 0
+                        &:focus-within
+                            box-shadow: 0px 0px 4px 0px rgba(66, 68, 90, 1)
+                        & input
+                            width: 100%
+                            outline: none
+                            border: 0
+                            font-weight: lighter
+                            color: #555
+                            font-size: 1rem
+                            &:focus
+                                color: $primary
+                    & button
+                        margin-top: 30px
+            &__box
+                display: flex
+                flex-direction: column
+                &__list
+                    display: flex
+                    flex-direction: row
+                    flex-wrap: wrap
+                    gap: 20px
+                    &__single
+                        display: flex
+                        flex-direction: column
+                        margin-bottom: 20px
+                        & span:not(.button)
+                            font-weight: lighter
+                            display: block
+                            color: #777
+                            &:first-of-type
+                                font-weight: 400
+                                margin-bottom: 3px
+                            &:last-of-type
+                                margin-bottom: 15px
+                            & i
+                                font-size: 1rem
+                                color: #c4c4c4
+                                margin-right: 2px
+                        & div
+                            & span
+                                padding: 16px 44px
+                                font-size: 1.1rem
+                                &:first-of-type
+                                    margin-right: 5px
 
 .auth
     width: 100%
@@ -1797,6 +1986,7 @@ select:-webkit-autofill:focus
                         outline: none
                         border: 0
                         font-weight: lighter
+                        color: #555
                         font-size: 1rem
                         &:focus
                             color: $primary
@@ -1815,6 +2005,7 @@ select:-webkit-autofill:focus
                     outline: none
                     border: 0
                     font-weight: lighter
+                    color: #555
                     font-size: 1rem
                     &:focus
                         color: $primary

@@ -12,21 +12,28 @@
                     </label>
                 </div>
                 <h4 v-if="delivery_method == 'pickup_in_person'">Miejsce odbioru</h4>
-                <div class="order__content__first-column place" v-if="delivery_method == 'pickup_in_person'">
-                    <label for="place1" class="order__content__first-column place input">
-                        <input type="radio" name="place" id="place1" value='krakow' v-model="delivery_place" checked>
-                        <div>
-                            <span>Sklep firmowy Kosmo</span>
-                            <span>Kraków</span>
-                            <span>Kosmiczna 15</span>
+                <div class="order__content__first-column place" v-if="delivery_method == 'pickup_in_person' && places.length < 4">
+                    <label :for="'place' + place.id" class="order__content__first-column place input" v-for="place in places" :key="place.id">
+                        <input type="radio" name="place" :id="'place' + place.id" :value='place.id' v-model="deliveryPlace_id" checked>
+                        <div class="order__content__first-column place__details">
+                            <span>{{ place.name }}</span>
+                            <span>{{ place.city }}</span>
+                            <span v-if="place.apartment_number">{{ place.street + ' ' + place.house_number + '/' + place.apartment_number }}</span>
+                            <span v-if="!place.apartment_number">{{ place.street + ' ' + place.house_number }}</span>
                         </div>
                     </label>
-                    <label for="place2" class="order__content__first-column place input">
-                        <input type="radio" name="place" id="place2" v-model="delivery_place" value='warszawa'>
-                        <div>
-                            <span>Żabka</span>
-                            <span>Warszawa</span>
-                            <span>Avengersów 121</span>
+                </div>
+                <div class="order__content__first-column place" v-if="delivery_method == 'pickup_in_person' && places.length >= 4">
+                    <span class="button-small dark" v-if="!ifDeliveryPlaceChosen" @click="ifSeeAllDeliveryPlaces = true">Wybierz</span>
+                    <label for="place" v-else class="order__content__first-column place input">
+                        <div class="order__content__first-column place__details">
+                            <span>{{ currentDeliveryPlace.name }}</span>
+                            <span>{{ currentDeliveryPlace.city }}</span>
+                            <span v-if="currentDeliveryPlace.apartment_number">{{ currentDeliveryPlace.street + ' ' + currentDeliveryPlace.house_number + '/' + currentDeliveryPlace.apartment_number }}</span>
+                            <span v-if="!currentDeliveryPlace.apartment_number">{{ currentDeliveryPlace.street + ' ' + currentDeliveryPlace.house_number }}</span>
+                        </div>
+                        <div class="order__content__first-column place__change">
+                            <span @click="ifSeeAllDeliveryPlaces = true">Zmień</span>
                         </div>
                     </label>
                 </div>
@@ -161,7 +168,7 @@
                                 <span>{{ product.price }} <span class="grey">zł</span></span>
                             </div>
                         </div>
-                        <div class="order__content__third-column__table__single delivery_price" v-if="delivery_method == 'courier'">
+                        <div class="order__content__third-column__table__single delivery-price" v-if="delivery_method == 'courier'">
                             <div class="td">
                                 <i class="fas fa-truck"></i>
                             </div>
@@ -170,7 +177,7 @@
                             </div>
                             <div class="td"></div>
                             <div class="td price">
-                                <span>20.00 <span class="grey">zł</span></span>
+                                <span>{{ delivery_price }} <span class="grey">zł</span></span>
                             </div>
                         </div>
                     </div>
@@ -178,11 +185,29 @@
                         <span class="grey">Łącznie</span>
                         <span class="price">{{ total }} <p class="grey">zł</p></span>
                         <span class="small">W cenie zawarto podatek VAT</span>
-                        <button type="submit" class="dark">Złóż zamówienie</button>
+                        <button type="submit" class="dark disabled" disabled v-if="deliveryPlace_id == ''">Złóż zamówienie</button>
+                        <button type="submit" class="dark" v-else>Złóż zamówienie</button>
                     </div>
                 </div>
             </section>
         </form>
+        <section class="order__addresses" v-if="ifSeeAllDeliveryPlaces">
+            <section class="order__addresses__content">
+                <h2>Miejsca odbioru</h2>
+                <span class="back" @click="ifSeeAllDeliveryPlaces = false">Powrót</span>
+                <div class="order__addresses__content__list">
+                    <div class="order__addresses__content__list__single" v-for="place in places" :key="place.id">
+                        <span>{{ place.name }}</span>
+                        <span>{{ place.street + ' ' + place.house_number}}{{ place.apartment_number ? '/' + place.apartment_number : '' }}</span>
+                        <span>{{ place.zip_code + ' ' + place.city }}</span>
+                        <div>
+                            <span class="button dark" v-if="place.id == deliveryPlace_id">Wybrano</span>
+                            <span class="button bright" v-else @click="chooseDeliveryPlace(place)">Wybierz</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
         <section class="order__addresses" v-if="ifSeeAddresses">
             <section class="order__addresses__content">
                 <h2>Twoje zapisane adresy</h2>
@@ -202,7 +227,7 @@
         <section class="widget" v-show="widget">
             <div class="widget__upper">
                 <i class="fas fa-exclamation-triangle"></i>
-                <span class="status">Wystąpił błąd! Spróbuj ponownie później!</span>
+                <span class="status" v-html="result.message"></span>
                 <i class="fas fa-times close" @click="widget = false"></i>
             </div>
         </section>
@@ -221,7 +246,7 @@
          data() {
             return {
                 delivery_method: 'pickup_in_person',
-                delivery_place: 'krakow',
+                deliveryPlace_id: '',
                 payment_method: 'cash_on_delivery',
                 purchaser: {
                     id: '',
@@ -263,12 +288,27 @@
                     zip_code: '',
                     city: '',
                 },
+                result: {
+                    message: 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>',
+                },
                 comment: '',
                 delivery_price: 0.00,
                 total: 0.00,
                 ifSeeAddresses: false,
                 haveAddress: false,
                 widget: false,
+                places: [],
+                place: {
+                    id: '',
+                    name: '',
+                    street: '',
+                    house_number: '',
+                    apartment_number: '',
+                    city: '',
+                },
+                currentDeliveryPlace: {},
+                ifSeeAllDeliveryPlaces: false,
+                ifDeliveryPlaceChosen: false
             };
         },
         mounted() {
@@ -280,20 +320,38 @@
             fetch('/api/get-products-from-cart', requestOptions)
                 .then(res => res.json())
                 .then(res => {
-                    this.products = res;
+                    this.products = res
+                })
+                .catch(err => {
+                    this.widget = true
                 })
             fetch('/api/get-total', requestOptions)
                 .then(res => res.json())
                 .then(res => {
-                    this.total = res.total;
+                    this.total = res.total
+                })
+                .catch(err => {
+                    this.widget = true
                 })
             if (this.user_id) {
                 fetch('/api/if-user-have-address', requestOptions)
                     .then(res => res.json())
                     .then(res => {
-                        this.haveAddress = res.haveAddress;
+                        this.haveAddress = res.haveAddress
+                    })
+                    .catch(err => {
+                        this.widget = true
                     })
             }
+            fetch('/api/get-delivery-price')
+                .then(res => res.json())
+                .then(res => {
+                    this.delivery_price = parseFloat(res).toFixed(2);
+                })
+                .catch(err => {
+                    this.widget = true
+                })
+            this.updateDeliveryPlacesList()
         },
         methods: {
             submit() {
@@ -315,7 +373,7 @@
                         city: this.purchaser.city,
                         comment: this.comment,
                         delivery_method: this.delivery_method,
-                        delivery_place: this.delivery_place,
+                        deliveryPlace_id: this.deliveryPlace_id,
                         payment_method: this.payment_method,
                         delivery_price: this.delivery_price,
                         total: this.total,
@@ -327,29 +385,29 @@
                     .then(res => {
                         if (!res.ok) {
                             if (res.status == 401)
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p>'
                             else if (res.status == 429)
-                                document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
                             else
-                                document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                            this.widget = true;
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                            this.widget = true
                         }
-                        return res;
+                        return res
                     })
                     .then(res => res.json())
                     .then(res => {
                         if (res.status == 200)
                             if (res.redirect)
-                                window.location.href = '/konto';
+                                window.location.href = '/konto'
                             else
                                 window.location.href = '/'
                     })
                     .catch(err => {
-                        this.widget = true;
+                        this.widget = true
                     });
             },
             showAddresses() {
-                this.ifSeeAddresses = true;
+                this.ifSeeAddresses = true
                 if (this.addresses.length == 0) {
                     const requestOptions = {
                         method: "POST",
@@ -360,38 +418,74 @@
                         .then(res => {
                             if (!res.ok) {
                                 if (res.status == 401)
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Brak autoryzacji!';
+                                    this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p> '
                                 else if (res.status == 429)
-                                    document.querySelector('.widget .status').textContent = 'Zbyt wiele zapytań! Zwolnij!';
+                                    this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
                                 else
-                                    document.querySelector('.widget .status').textContent = 'Wystąpił błąd! Spróbuj ponownie później!';
-                                this.widget = true;
+                                    this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                                this.widget = true
                             }
-                            return res;
+                            return res
                         })
                         .then(res => res.json())
                         .then(res => {
                             if (!res.exception)
-                                this.addresses = res;
+                                this.addresses = res
                         })
                         .catch(err => {
-                            this.widget = true;
+                            this.widget = true
                         });
                 }
             },
             chooseAddress(address) {
-                this.purchaser = {...address};
-                this.purchaser.email = this.email;
-                this.ifSeeAddresses = false;
+                this.purchaser = {...address}
+                this.purchaser.email = this.email
+                this.ifSeeAddresses = false
             },
             changePlace() {
-                this.total = parseFloat(this.total);
+                this.total = parseFloat(this.total)
                 if (this.delivery_method == 'courier') {
-                    this.total = parseFloat(this.total + 20.00).toFixed(2)
-                    this.delivery_price = 20
+                    this.total = parseFloat(this.total + parseFloat(this.delivery_price)).toFixed(2)
                 }
                 else
-                    this.total = parseFloat(this.total - 20.00).toFixed(2)
+                    this.total = parseFloat(this.total - parseFloat(this.delivery_price)).toFixed(2)
+            },
+            updateDeliveryPlacesList() {
+                const requestOptions = {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ _token: this._token })
+                };
+                fetch("/api/get-delivery-places", requestOptions)
+                    .then(res => {
+                        if (!res.ok) {
+                            if (res.status == 401)
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Brak autoryzacji!</p> '
+                            else if (res.status == 429)
+                                this.result.message = 'Zbyt wiele zapytań!<p class="to-hide"> Zwolnij!</p>'
+                            else
+                                this.result.message = 'Wystąpił błąd!<p class="to-hide"> Spróbuj ponownie później!</p>'
+                            this.widget = true
+                        }
+                        return res
+                    })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.exception) {
+                            this.places = res
+                            if (this.places.length < 4)
+                                this.deliveryPlace_id = this.places[0]['id']
+                        }
+                    })
+                    .catch(err => {
+                        this.widget = true
+                    });
+            },
+            chooseDeliveryPlace(place) {
+                this.currentDeliveryPlace = place
+                this.ifSeeAllDeliveryPlaces = false
+                this.deliveryPlace_id = place.id
+                this.ifDeliveryPlaceChosen = true
             }
         }
     }

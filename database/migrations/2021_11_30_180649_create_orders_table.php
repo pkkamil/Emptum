@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
             $table->decimal('total', 10, 2);
             $table->integer('cart_id');
             $table->enum('delivery_method', ['pickup_in_person', 'courier']);
-            $table->enum('delivery_place', ['krakow', 'warszawa'])->nullable();
+            $table->integer('deliveryPlace_id')->nullable();
             $table->enum('payment_method', ['cash_on_delivery']);
             $table->enum('purchaser_type', ['person', 'company']);
             $table->string('name', 100);
